@@ -1,0 +1,10 @@
+{
+  "label": {
+    "about": "About",
+    "changelog": "Changelog",
+    "home": "Home"
+  },
+  "message": {
+    "loading": "Loading..."
+  }
+}

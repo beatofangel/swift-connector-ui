@@ -1,0 +1,10 @@
+{
+  "label": {
+    "about": "关于",
+    "changelog": "变更日志",
+    "home": "首页"
+  },
+  "message": {
+    "loading": "加载中···"
+  }
+}
