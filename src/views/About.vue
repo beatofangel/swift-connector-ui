@@ -7,7 +7,7 @@
             max-height="calc(100vh - 24px)"
           >
             <v-card-title>
-              {{ $t("label.about") }} &lt;DBToolsAddIn&gt;
+              {{ $t("label.about") }} &lt;swift-connector&gt;
             </v-card-title>
             <v-card-text>
               <div>

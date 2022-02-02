@@ -1,4 +1,4 @@
-# db-tools-addin-local
+# swift-connector-ui
 
 ## Project setup
 ```
