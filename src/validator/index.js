@@ -29,7 +29,7 @@ Object.keys(translations).forEach(lang => {
 configure({
   defaultMessage: (field, values) => {
     // override the field name.
-    values._field_ = i18n.t(field);
+    // values._field_ = i18n.t(field);
     return i18n.t(`validations.${values._rule_}`, values);
   }
 });

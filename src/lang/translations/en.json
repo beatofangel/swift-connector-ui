@@ -16,11 +16,11 @@
     "connectionName": "Connection Name",
     "host": "Host",
     "port": "Port",
-    "sid": "SID",
     "username": "Username",
     "password": "Password",
     "protectedMode": "Protected Mode",
-    "normalMode": "Normal Mode"
+    "normalMode": "Normal Mode",
+    "databaseName": "Database Name"
   },
   "message": {
     "loading": "Loading...",
@@ -37,9 +37,9 @@
       "connectionName": "Please input @:label.connectionName",
       "host": "Please input @:label.host",
       "port": "Please input @:label.port",
-      "sid": "Please input @:label.sid",
       "username": "Please input @:label.username",
-      "password": "Please input @:label.password"
+      "password": "Please input @:label.password",
+      "database": "Please input @:label.databaseName"
     }
   }
 }

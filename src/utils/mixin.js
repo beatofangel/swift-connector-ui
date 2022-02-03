@@ -6,6 +6,10 @@ export const mixin={
         CREATE: "create",
         EDIT: "edit",
         DELETE: "delete"
+      }),
+      protectedMode: Object.freeze({
+        PROTECTED: 1,
+        NORMAL: 0
       })
     }
   }

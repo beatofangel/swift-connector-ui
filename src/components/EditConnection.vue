@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="toggleShow" max-width="600">
     <validation-observer ref="observer" v-slot="{ invalid }">
-      <v-form @submit.prevent="onSubmit">
+      <v-form ref="form" @submit.prevent="onSubmit">
         <v-card>
           <v-toolbar>
             <v-icon>{{ getIcon }}</v-icon>
@@ -105,15 +105,15 @@
             <v-row class="my-0">
               <v-col class="py-0">
                 <validation-provider
-                  :name="$t('label.sid')"
+                  :name="$t('label.databaseName')"
                   rules="required"
                   v-slot="{ errors }"
                 >
                   <v-text-field
-                    v-model="formData.sid"
-                    :label="$t('label.sid')"
+                    v-model="formData.databaseName"
+                    :label="$t('label.databaseName')"
                     :error-messages="errors[0]"
-                    :placeholder="$t('message.ph.sid')"
+                    :placeholder="$t('message.ph.databaseName')"
                     outlined
                     dense
                   ></v-text-field>
@@ -160,7 +160,16 @@
               </v-col>
             </v-row>
             <v-row class="my-0">
-              <v-col class="py-0"> </v-col>
+              <v-col class="py-0">
+                <v-switch
+                  v-model="formData.protected"
+                  class="mx-3"
+                  inset
+                  :false-value="protectedMode.NORMAL"
+                  :true-value="protectedMode.PROTECTED"
+                  :label="$t(`label.${formData.protected == protectedMode.PROTECTED ? 'protected' : 'normal'}Mode`)"
+                ></v-switch>
+              </v-col>
             </v-row>
           </v-card-text>
           <v-divider></v-divider>
@@ -185,14 +194,31 @@ export default {
     },
     mode: String,
   },
+  mounted() {
+    window.addConnectionCallback = this.addConnectionCallback
+  },
   methods: {
     onClose() {
       this.toggleShow = false
+      this.$refs.form.reset ()
       this.$refs.observer.reset()
     },
     onSubmit() {
-      this.close()
+      this.$refs.observer.validate().then(isValid => {
+        if (isValid) {
+          window.chrome.webview.postMessage({
+            api: 'addConnection',
+            callback: 'addConnectionCallback',
+            args: JSON.stringify(this.formData)
+          })
+        }
+      })
     },
+    addConnectionCallback(result) {
+      if (result.success) {
+        this.onClose()
+      }
+    }
   },
   computed: {
     toggleShow: {
@@ -264,13 +290,15 @@ export default {
       ],
       showPassword: false,
       formData: {
+        id: null,
         databaseType: null,
         connectionName: null,
         host: null,
         port: null,
-        sid: null,
+        databaseName: null,
         username: null,
         password: null,
+        protected: 0,
       },
     };
   },

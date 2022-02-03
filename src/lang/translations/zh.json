@@ -16,11 +16,11 @@
     "connectionName": "连接名称",
     "host": "主机",
     "port": "端口",
-    "sid": "SID",
     "username": "用户名",
     "password": "密码",
     "protectedMode": "保护模式",
-    "normalMode": "普通模式"
+    "normalMode": "普通模式",
+    "databaseName": "数据库名"
   },
   "message": {
     "loading": "加载中···",
@@ -37,9 +37,9 @@
       "connectionName": "请输入@:label.connectionName",
       "host": "请输入@:label.host",
       "port": "请输入@:label.port",
-      "sid": "请输入@:label.sid",
       "username": "请输入@:label.username",
-      "password": "请输入@:label.password"
+      "password": "请输入@:label.password",
+      "databaseName": "请输入@:label.databaseName"
     }
   }
 }

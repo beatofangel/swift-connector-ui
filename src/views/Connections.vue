@@ -37,15 +37,21 @@
         </v-card>
       </v-col>
     </v-row>
+    <v-row>
+      <v-col>
+        <show-connection-vue :items="records"></show-connection-vue>
+      </v-col>
+    </v-row>
     <edit-connection-vue :mode="mode" v-model="showEdit"></edit-connection-vue>
   </v-container>
 </template>
 
 <script>
 import EditConnectionVue from '../components/EditConnection.vue';
+import ShowConnectionVue from '../components/ShowConnection.vue';
 export default {
   name: 'connections',
-  components: { EditConnectionVue },
+  components: { EditConnectionVue, ShowConnectionVue },
   mounted() {
     window.initConnections = this.initConnections
     window.chrome.webview.postMessage({
@@ -80,72 +86,65 @@ export default {
       search: '',
       headers: [
         {
-          text: "type",
+          text: "Type",
           align: "start",
           sortable: true,
-          value: "type",
+          value: "Type",
         },
         {
-          text: "port",
+          text: "Port",
           align: "start",
           sortable: true,
-          value: "port",
+          value: "Port",
         },
         {
-          text: "sid",
+          text: "Name",
           align: "start",
           sortable: true,
-          value: "sid",
+          value: "Name",
         },
         {
-          text: "name",
+          text: "Datasource",
           align: "start",
           sortable: true,
-          value: "name",
+          value: "Datasource",
         },
         {
-          text: "datasource",
+          text: "Database",
           align: "start",
           sortable: true,
-          value: "datasource",
+          value: "Database",
         },
         {
-          text: "database",
+          text: "Username",
           align: "start",
           sortable: true,
-          value: "database",
+          value: "Username",
         },
         {
-          text: "username",
+          text: "Password",
           align: "start",
           sortable: true,
-          value: "username",
-        },
-        {
-          text: "password",
-          align: "start",
-          sortable: true,
-          value: "password",
+          value: "Password",
           filterable: false,
         },
         {
-          text: "lastchange",
+          text: "Lastchange",
           align: "start",
           sortable: true,
-          value: "lastchange",
+          value: "Lastchange",
         },
         {
-          text: "mode",
+          text: "Mode",
           align: "start",
           sortable: true,
-          value: "mode",
+          value: "Mode",
         },
       ],
       records: [
         {
           type: "Oracle",
           port: 1521,
-          sid: "xepdb1",
           name: "test-conn1",
           datasource: "localhost",
           database: null,
@@ -157,7 +156,6 @@ export default {
         {
           type: "MySQL",
           port: 3306,
-          sid: null,
           name: "test-conn2",
           datasource: "localhost",
           database: "myConn1",
