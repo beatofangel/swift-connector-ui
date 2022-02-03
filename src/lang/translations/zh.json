@@ -2,9 +2,44 @@
   "label": {
     "about": "关于",
     "changelog": "变更日志",
-    "home": "首页"
+    "connections": "连接列表",
+    "home": "首页",
+    "editMode": {
+      "detail": "{0}详情",
+      "create": "新建{0}",
+      "edit": "编辑{0}",
+      "delete": "删除{0}"
+    },
+    "search": "查询",
+    "connection": "连接",
+    "databaseType": "数据库类型",
+    "connectionName": "连接名称",
+    "host": "主机",
+    "port": "端口",
+    "sid": "SID",
+    "username": "用户名",
+    "password": "密码",
+    "protectedMode": "保护模式",
+    "normalMode": "普通模式"
   },
   "message": {
-    "loading": "加载中···"
+    "loading": "加载中···",
+    "hint": {
+      "connection": {
+        "detail": "显示@:label.connection详情。",
+        "create": "创建一个新的@:label.connection，使您能便捷地访问数据库。",
+        "edit": "您可以随时修改@:label.connection的各种信息（例如：@:label.connectionName、@:label.username、@:label.password）。",
+        "delete": "请注意，@:label.connection被删除后将无法恢复！"
+      }
+    },
+    "ph": {
+      "databaseType": "请选择@:label.databaseType",
+      "connectionName": "请输入@:label.connectionName",
+      "host": "请输入@:label.host",
+      "port": "请输入@:label.port",
+      "sid": "请输入@:label.sid",
+      "username": "请输入@:label.username",
+      "password": "请输入@:label.password"
+    }
   }
 }

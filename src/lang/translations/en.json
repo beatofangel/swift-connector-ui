@@ -2,9 +2,44 @@
   "label": {
     "about": "About",
     "changelog": "Changelog",
-    "home": "Home"
+    "connections": "Connections",
+    "home": "Home",
+    "editMode": {
+      "detail": "{0} Detail",
+      "create": "Create {0}",
+      "edit": "Edit {0}",
+      "delete": "Delete {0}"
+    },
+    "search": "Search",
+    "connection": "Connection",
+    "databaseType": "Database Type",
+    "connectionName": "Connection Name",
+    "host": "Host",
+    "port": "Port",
+    "sid": "SID",
+    "username": "Username",
+    "password": "Password",
+    "protectedMode": "Protected Mode",
+    "normalMode": "Normal Mode"
   },
   "message": {
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "hint": {
+      "connection": {
+        "detail": "Display detail information of @:label.connection .",
+        "create": "Create a new @:label.connection，allowing you to easily access the database.",
+        "edit": "You can modify parts of the @:label.connection (e.g., @:label.connectionName、@:label.username、@:label.password) at any time.",
+        "delete": "Note that once a @:label.connection is deleted, it cannot be restored!"
+      }
+    },
+    "ph": {
+      "databaseType": "Please select @:label.databaseType",
+      "connectionName": "Please input @:label.connectionName",
+      "host": "Please input @:label.host",
+      "port": "Please input @:label.port",
+      "sid": "Please input @:label.sid",
+      "username": "Please input @:label.username",
+      "password": "Please input @:label.password"
+    }
   }
 }

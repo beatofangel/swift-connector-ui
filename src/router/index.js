@@ -17,6 +17,12 @@ const routes = [
     component: () => import('../views/Home.vue')
   },
   {
+    path: '/connections',
+    name: 'Connections',
+    icon: 'mdi-database',
+    component: () => import('../views/Connections.vue')
+  },
+  {
     path: '/change-log',
     name: 'ChangeLog',
     icon: 'mdi-playlist-edit',
