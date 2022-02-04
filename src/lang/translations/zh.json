@@ -32,6 +32,11 @@
         "delete": "请注意，@:label.connection被删除后将无法恢复！"
       }
     },
+    "success": "成功",
+    "failed": "失败",
+    "currentConnection": "当前连接",
+    "switch2Current": "切换到{0}",
+    "switch": "切换{0}",
     "ph": {
       "databaseType": "请选择@:label.databaseType",
       "connectionName": "请输入@:label.connectionName",

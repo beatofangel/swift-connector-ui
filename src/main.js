@@ -12,6 +12,11 @@ Vue.mixin(mixin)
 Vue.component('validation-provider', ValidationProvider)
 Vue.component('validation-observer', ValidationObserver)
 
+router.beforeEach((to, from, next) => {
+  const regex = /\/[a-z]{2}(_[A-Z]{2})?\/connections/
+  window.taskPaneMode = !regex.test(to.path)
+  next()
+})
 router.afterEach(localeChanged)
 
 new Vue({

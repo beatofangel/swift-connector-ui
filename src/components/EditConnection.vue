@@ -19,7 +19,7 @@
               <v-col class="py-0">
                 <validation-provider
                   :name="$t('label.databaseType')"
-                  rules="required"
+                  :rules="getRules.databaseType"
                   v-slot="{ errors }"
                 >
                   <v-select
@@ -52,7 +52,7 @@
               <v-col class="py-0">
                 <validation-provider
                   :name="$t('label.connectionName')"
-                  rules="required"
+                  :rules="getRules.connectionName"
                   v-slot="{ errors }"
                 >
                   <v-text-field
@@ -70,7 +70,7 @@
               <v-col class="py-0">
                 <validation-provider
                   :name="$t('label.host')"
-                  rules="required"
+                  :rules="getRules.host"
                   v-slot="{ errors }"
                 >
                   <v-text-field
@@ -84,11 +84,11 @@
                 </validation-provider>
               </v-col>
             </v-row>
-            <v-row class="my-0">
+            <v-row class="my-0" v-show="formData.databaseType != 5">
               <v-col class="py-0">
                 <validation-provider
                   :name="$t('label.port')"
-                  rules="required"
+                  :rules="getRules.port"
                   v-slot="{ errors }"
                 >
                   <v-text-field
@@ -102,11 +102,11 @@
                 </validation-provider>
               </v-col>
             </v-row>
-            <v-row class="my-0">
+            <v-row class="my-0" v-show="formData.databaseType != 5">
               <v-col class="py-0">
                 <validation-provider
                   :name="$t('label.databaseName')"
-                  rules="required"
+                  :rules="getRules.databaseName"
                   v-slot="{ errors }"
                 >
                   <v-text-field
@@ -120,11 +120,11 @@
                 </validation-provider>
               </v-col>
             </v-row>
-            <v-row class="my-0">
+            <v-row class="my-0" v-show="formData.databaseType != 5">
               <v-col class="py-0">
                 <validation-provider
                   :name="$t('label.username')"
-                  rules="required"
+                  :rules="getRules.username"
                   v-slot="{ errors }"
                 >
                   <v-text-field
@@ -142,7 +142,7 @@
               <v-col class="py-0">
                 <validation-provider
                   :name="$t('label.password')"
-                  rules="required"
+                  :rules="getRules.password"
                   v-slot="{ errors }"
                 >
                   <v-text-field
@@ -170,6 +170,7 @@
                   :label="$t(`label.${formData.protected == protectedMode.PROTECTED ? 'protected' : 'normal'}Mode`)"
                 ></v-switch>
               </v-col>
+              <v-spacer></v-spacer>
             </v-row>
           </v-card-text>
           <v-divider></v-divider>
@@ -214,9 +215,14 @@ export default {
         }
       })
     },
-    addConnectionCallback(result) {
-      if (result.success) {
+    addConnectionCallback(content) {
+      const result = JSON.parse(content)
+      if (result.Success) {
+        this.$toast.success(this.$t('label.editMode.create').replace('{0}', this.$t('message.success')), { icon: 'mdi-check-circle-outline' })
         this.onClose()
+      } else {
+        this.$toast.error(this.$t('label.editMode.create').replace('{0}', this.$t('message.failed')), { icon: 'mdi-close-circle-outline' })
+        console.error(result.Message)
       }
     }
   },
@@ -258,6 +264,21 @@ export default {
     getHint() {
       return this.$t(`message.hint.connection.${this.mode}`);
     },
+    getRules() {
+      if (this.formData.databaseType) {
+        return this.rules[this.formData.databaseType - 1]
+      } else {
+        return { 
+          databaseType: { required: true },
+          connectionName: { required: true },
+          host: {  },
+          port: { numeric: true, between: [1024, 49151] },
+          databaseName: { alpha_num: true },
+          username: { alpha_num: true },
+          password: {  }
+        }
+      }
+    },
   },
   data() {
     return {
@@ -288,9 +309,55 @@ export default {
           icon: require("@/assets/icons/database/sqlite_mini_32.png"),
         },
       ],
+      rules: 
+        [{
+          databaseType: { required: true },
+          connectionName: { required: true },
+          host: { required: true },
+          port: { required: true, numeric: true, between: [1024, 49151] },
+          databaseName: { required: true, alpha_num: true },
+          username: { required: true, alpha_num: true },
+          password: { required: true }
+        },
+        {
+          databaseType: { required: true },
+          connectionName: { required: true },
+          host: { required: true },
+          port: { required: true, numeric: true, between: [1024, 49151] },
+          databaseName: { required: true, alpha_num: true },
+          username: { required: true, alpha_num: true },
+          password: { required: true }
+        },
+        {
+          databaseType: { required: true },
+          connectionName: { required: true },
+          host: { required: true },
+          port: { required: true, numeric: true, between: [1024, 49151] },
+          databaseName: { required: true, alpha_num: true },
+          username: { required: true, alpha_num: true },
+          password: { required: true }
+        },
+        {
+          databaseType: { required: true },
+          connectionName: { required: true },
+          host: { required: true },
+          port: { required: true, numeric: true, between: [1024, 49151] },
+          databaseName: { required: true, alpha_num: true },
+          username: { required: true, alpha_num: true },
+          password: { required: true }
+        },
+        {
+          databaseType: { required: true },
+          connectionName: { required: true },
+          host: { required: true },
+          port: {  },
+          databaseName: {  },
+          username: {  },
+          password: {  }
+        }]
+      ,
       showPassword: false,
       formData: {
-        id: null,
         databaseType: null,
         connectionName: null,
         host: null,

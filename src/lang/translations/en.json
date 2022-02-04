@@ -32,6 +32,11 @@
         "delete": "Note that once a @:label.connection is deleted, it cannot be restored!"
       }
     },
+    "success": "success",
+    "failed": "failed",
+    "currentConnection": "Current connection",
+    "switch2Current": "Switch to {0}",
+    "switch": "switch {0}",
     "ph": {
       "databaseType": "Please select @:label.databaseType",
       "connectionName": "Please input @:label.connectionName",
