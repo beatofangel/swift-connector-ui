@@ -4,7 +4,7 @@
       <v-form ref="form" @submit.prevent="onSubmit">
         <v-card>
           <v-toolbar>
-    <v-img :src="getBackgroundImage" class="background"></v-img>
+            <v-img :src="getBackgroundImage" max-width="400px" class="background"></v-img>
             <v-icon>{{ getIcon }}</v-icon>
             <span class="mt-1">{{ getTitle }}</span>
             <v-spacer></v-spacer>
@@ -158,12 +158,16 @@
                     :label="$t('label.password')"
                     :error-messages="errors[0]"
                     :placeholder="$t('message.ph.password')"
-                    :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                    @click:append="showPassword = !showPassword"
                     :type="showPassword ? 'text' : 'password'"
                     outlined
                     dense
-                  ></v-text-field>
+                  >
+                    <template v-slot:append>
+                      <v-icon :color="showPassword ? 'primary' : 'grey darken-2'" @click="updateShowPassword =! showPassword">
+                        {{ showPassword ? 'mdi-eye' : 'mdi-eye-off' }}
+                      </v-icon>
+                    </template>
+                  </v-text-field>
                 </validation-provider>
               </v-col>
             </v-row>
@@ -185,8 +189,8 @@
           <v-divider></v-divider>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn @click="onClose" text>Cancel</v-btn>
-            <v-btn v-if="mode == editMode.CREATE || mode == editMode.EDIT || mode == editMode.DELETE" type="submit" :disabled="invalid" color="primary">OK</v-btn>
+            <v-btn @click="onClose" text>{{ $t('label.cancel') }}</v-btn>
+            <v-btn v-if="mode == editMode.CREATE || mode == editMode.EDIT || mode == editMode.DELETE" type="submit" :disabled="invalid" color="primary">{{ $t('label.ok') }}</v-btn>
           </v-card-actions>
         </v-card>
       </v-form>
@@ -216,6 +220,7 @@ export default {
       Lastchange: Date
     },
     mode: String,
+    showPassword: Boolean
   },
   mounted() {
     window.editConnectionCallback = this.editConnectionCallback
@@ -259,6 +264,14 @@ export default {
       },
       set: function (newValue) {
         this.$emit("input", newValue);
+      },
+    },
+    updateShowPassword: {
+      get: function () {
+        return this.showPassword;
+      },
+      set: function (newValue) {
+        this.$emit("update:showPassword", newValue);
       },
     },
     getIcon() {
@@ -305,12 +318,6 @@ export default {
         }
       }
     },
-    // getBackgroundImage() {
-    //   if (this.formData && this.formData.databaseType > 0) {
-    //     return `background-image:url('${this.dbTypeBackgrounds[this.formData.databaseType - 1]}');background-position: 40% 40%; filter: blur(2px);`
-    //   }
-    //   return ''
-    // },
     getBackgroundImage() {
       if (this.formData && this.formData.databaseType > 0) {
         return this.dbTypeBackgrounds[this.formData.databaseType - 1]
@@ -453,7 +460,6 @@ export default {
           password: {  }
         }]
       ,
-      showPassword: false,
       formData: {
         id: null,
         databaseType: null,
@@ -475,7 +481,7 @@ export default {
 <style scoped>
 .background {
   position: absolute;
-  left: 70px;
+  left: 100px;
   top: 0px;
   width: 100%;
   height: 100%;

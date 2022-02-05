@@ -5,12 +5,18 @@
     "connections": "Connections",
     "home": "Home",
     "editMode": {
-      "detail": "{0} Detail",
-      "create": "Create {0}",
-      "edit": "Edit {0}",
-      "delete": "Delete {0}"
+      "detail": "{0} @:label.detail",
+      "create": "@:label.create {0}",
+      "edit": "@:label.edit {0}",
+      "delete": "@:label.delete {0}"
     },
     "search": "Search",
+    "create": "Create",
+    "edit": "Edit",
+    "delete": "Delete",
+    "copy": "Copy",
+    "detail": "Detail",
+    "aCopy": "Copy",
     "connection": "Connection",
     "databaseType": "Database Type",
     "connectionName": "Connection Name",
@@ -20,7 +26,14 @@
     "password": "Password",
     "protectedMode": "Protected Mode",
     "normalMode": "Normal Mode",
-    "databaseName": "Database Name"
+    "databaseName": "Database Name",
+    "ok": "ok",
+    "cancel": "cancel",
+    "inUse": "IN USE",
+    "showPassword": "Click to show @:label.password",
+    "hidePassword": "Click to hide @:label.password",
+    "listView": "List mode",
+    "moduleView": "Module mode"
   },
   "message": {
     "loading": "Loading...",
@@ -35,7 +48,7 @@
     "success": "success",
     "failed": "failed",
     "currentConnection": "Current connection",
-    "switch2Current": "Switch to {0}",
+    "switch2Current": "Switch to this {0}",
     "switch": "switch {0}",
     "ph": {
       "databaseType": "Please select @:label.databaseType",

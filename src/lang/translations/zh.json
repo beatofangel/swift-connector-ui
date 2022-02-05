@@ -5,12 +5,18 @@
     "connections": "连接列表",
     "home": "首页",
     "editMode": {
-      "detail": "{0}详情",
-      "create": "新建{0}",
-      "edit": "编辑{0}",
-      "delete": "删除{0}"
+      "detail": "{0}@:label.detail",
+      "create": "@:label.create{0}",
+      "edit": "@:label.edit{0}",
+      "delete": "@:label.delete{0}"
     },
     "search": "查询",
+    "create": "新建",
+    "edit": "编辑",
+    "delete": "删除",
+    "copy": "复制",
+    "detail": "详情",
+    "aCopy": "副本",
     "connection": "连接",
     "databaseType": "数据库类型",
     "connectionName": "连接名称",
@@ -20,7 +26,14 @@
     "password": "密码",
     "protectedMode": "保护模式",
     "normalMode": "普通模式",
-    "databaseName": "数据库名"
+    "databaseName": "数据库名",
+    "ok": "确定",
+    "cancel": "取消",
+    "inUse": "使用中",
+    "showPassword": "点击显示@:label.password",
+    "hidePassword": "点击隐藏@:label.password",
+    "listView": "列表视图",
+    "moduleView": "模块视图"
   },
   "message": {
     "loading": "加载中···",
@@ -35,7 +48,7 @@
     "success": "成功",
     "failed": "失败",
     "currentConnection": "当前连接",
-    "switch2Current": "切换到{0}",
+    "switch2Current": "切换到此{0}",
     "switch": "切换{0}",
     "ph": {
       "databaseType": "请选择@:label.databaseType",

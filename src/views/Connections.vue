@@ -3,8 +3,9 @@
     <v-row>
       <v-col>
         <v-card max-height="calc(100vh - 48px)">
-          <v-card-title>
-            <v-row class="d-flex justify-space-between mx-2">
+          <v-card-title class="py-2">
+            <v-row class="d-flex mx-2 my-0" dense>
+              <v-col cols="6">
                 <v-text-field
                   v-model="search"
                   append-icon="mdi-magnify"
@@ -13,21 +14,46 @@
                   clearable
                   hide-details
                 ></v-text-field>
-                <v-spacer></v-spacer>
-                <v-btn-toggle class="mt-4" v-model="toggleViewMode" mandatory>
-                  <v-btn small>
-                    <v-icon>mdi-view-list</v-icon>
-                  </v-btn>
-                  <v-btn small>
-                    <v-icon>mdi-view-module</v-icon>
-                  </v-btn>
+              </v-col>
+              <v-col cols="6" align="right">
+                <v-tooltip top>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-slide-x-transition>
+                      <v-btn class="mt-n2" v-show="toggleViewMode == 0" @click="showPassword = !showPassword" v-bind="attrs" v-on="on" small icon>
+                        <v-icon :color="showPassword ? 'primary' : 'grey darken-2'">{{ showPassword ? 'mdi-eye' : 'mdi-eye-off' }}</v-icon>
+                      </v-btn>
+                    </v-slide-x-transition>
+                  </template>
+                  <span>{{ showPassword ? $t('label.hidePassword') : $t('label.showPassword') }}</span>
+                </v-tooltip>
+                <v-fade-transition>
+                  <v-divider v-show="toggleViewMode == 0" class="mx-2 short-divider" vertical></v-divider>
+                </v-fade-transition>
+                <v-btn-toggle class="mt-5" v-model="toggleViewMode" mandatory>
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn v-bind="attrs" v-on="on" small>
+                        <v-icon>mdi-view-list</v-icon>
+                      </v-btn>
+                    </template>
+                    <span>{{ $t('label.listView') }}</span>
+                  </v-tooltip>
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn v-bind="attrs" v-on="on" small>
+                        <v-icon>mdi-view-module</v-icon>
+                      </v-btn>
+                    </template>
+                    <span>{{ $t('label.moduleView') }}</span>
+                  </v-tooltip>
                 </v-btn-toggle>
+              </v-col>
             </v-row>
           </v-card-title>
           <v-card
             class="overflow-y-auto overflow-x-hidden"
             elevation="0"
-            max-height="calc(100vh - 128px)"
+            max-height="calc(100vh - 118px)"
           >
             <v-card-text>
               <v-row dense>
@@ -47,44 +73,9 @@
                         class="mx-4 my-6"
                         :elevation="item.Current ? '8' : '2'"
                       >
-                        <v-row v-if="toggleViewMode == 1" class="mb-n6">
-                          <v-spacer></v-spacer>
-                          <v-col align="right">
-                            <v-avatar
-                              v-show="item.Current"
-                              size="40"
-                              class="mt-n5 mr-4 pl-1 select-database"
-                            >
-                              <v-icon x-large color="success"
-                                >mdi-bookmark-check</v-icon
-                              >
-                            </v-avatar>
-                            <v-hover
-                              v-show="!item.Current"
-                              v-slot="{ hover }"
-                            >
-                              <v-btn
-                                @click="switch2Current(item.Id)"
-                                class="mt-n5 mr-4 select-database"
-                                :ripple="false"
-                                text
-                                icon
-                              >
-                                <v-icon
-                                  x-large
-                                  :color="hover ? 'success' : 'grey'"
-                                  >{{
-                                    hover
-                                      ? "mdi-bookmark-check"
-                                      : "mdi-bookmark"
-                                  }}</v-icon
-                                >
-                              </v-btn>
-                            </v-hover>
-                          </v-col>
-                        </v-row>
-                        <v-row v-if="toggleViewMode == 1" class="mt-n10">
-                          <v-col cols="10" class="mx-2 text-h5 overflow-x-hidden">
+                        <div v-if="item.Current && toggleViewMode == 1" :class="`stamp-mini ${getMiniStampTransition(item.current)}`">{{ $t('label.inUse') }}</div>
+                        <v-row v-if="toggleViewMode == 1" class="">
+                          <v-col cols="10" class="mx-2 text-h5 overflow-x-hidden" align="center">
                             <span class="text-truncate"><v-icon class="mt-n1" v-if="item.Mode == 1">mdi-lock-outline</v-icon>{{ item.Name }}</span>
                           </v-col>
                         </v-row>
@@ -93,27 +84,33 @@
                             :cols="toggleViewMode == 0 ? 4 : 12"
                             :class="toggleViewMode == 0 ? 'pr-0' : null"
                           >
-                            <v-hover v-slot="{ hover }">
-                              <v-card
-                                @click="
-                                  item.Current ? null : switch2Current(item.Id)
-                                "
-                                :ripple="false"
-                                class="overflow-x-hidden select-database"
-                                :height="toggleViewMode == 0 ? 200 : 224"
-                                elevation="0"
-                              >
-                                <v-card-text class="justify-center">
-                                  <v-img
-                                    :class="getImageTransition(item.Current, hover)"
-                                    width="168"
-                                    height="168"
-                                    :src="getAvatar(item.Type)"
-                                  >
-                                  </v-img>
-                                </v-card-text>
-                              </v-card>
-                            </v-hover>
+                          <v-tooltip :disabled="item.Current" top>
+                            <template v-slot:activator="{ on, attrs }">
+                              <v-hover v-slot="{ hover }">
+                                <v-card
+                                  @click="
+                                    item.Current ? null : switch2Current(item.Id)
+                                  "
+                                  :ripple="false"
+                                  class="overflow-x-hidden select-database"
+                                  height="200"
+                                  elevation="0"
+                                  v-bind="attrs" v-on="on"
+                                >
+                                  <v-card-text class="justify-center">
+                                    <v-img
+                                      :class="getImageTransition(item.Current, hover)"
+                                      width="168"
+                                      height="168"
+                                      :src="getAvatar(item.Type)"
+                                    >
+                                    </v-img>
+                                  </v-card-text>
+                                </v-card>
+                              </v-hover>
+                            </template>
+                            <span>{{ $t('message.switch2Current').replace('{0}', $t('label.connection').toLowerCase()) }}</span>
+                          </v-tooltip>
                           </v-col>
                           <v-col
                             v-if="toggleViewMode == 0"
@@ -121,42 +118,8 @@
                             class="pl-0"
                           >
                             <v-card height="200" elevation="0">
-                              <v-row class="mb-n6">
-                                <v-col align="right">
-                                  <v-avatar
-                                    v-show="item.Current"
-                                    size="40"
-                                    class="mt-n5 mr-4 pl-1 select-database"
-                                  >
-                                    <v-icon x-large color="success"
-                                      >mdi-bookmark-check</v-icon
-                                    >
-                                  </v-avatar>
-                                  <v-hover
-                                    v-show="!item.Current"
-                                    v-slot="{ hover }"
-                                  >
-                                    <v-btn
-                                      @click="switch2Current(item.Id)"
-                                      class="mt-n5 mr-4 select-database"
-                                      :ripple="false"
-                                      text
-                                      icon
-                                    >
-                                      <v-icon
-                                        x-large
-                                        :color="hover ? 'success' : 'grey'"
-                                        >{{
-                                          hover
-                                            ? "mdi-bookmark-check"
-                                            : "mdi-bookmark"
-                                        }}</v-icon
-                                      >
-                                    </v-btn>
-                                  </v-hover>
-                                </v-col>
-                              </v-row>
-                              <v-row class="mt-n10">
+                              <div v-if="item.Current" :class="`stamp ${getStampTransition(item.current)}`">{{ $t('label.inUse') }}</div>
+                              <v-row class="">
                                 <v-col cols="10" class="mx-2 text-h5 overflow-x-hidden">
                                   <span class="text-truncate"><v-icon class="mt-n1" v-if="item.Mode == 1">mdi-lock-outline</v-icon>{{ item.Name }}</span>
                                 </v-col>
@@ -164,21 +127,21 @@
                               <v-card-text>
                                 <v-row>
                                   <v-col>
-                                    <b>Host:</b> {{ item.Datasource }}
+                                    <b>{{ $t('label.host') }}:</b> {{ item.Datasource }}
                                   </v-col>
                                   <v-col v-if="!!item.Port">
-                                    <b>Port:</b> {{ item.Port }}
+                                    <b>{{ $t('label.port') }}:</b> {{ item.Port }}
                                   </v-col>
                                   <v-col v-if="!!item.Database">
-                                    <b>Database:</b> {{ item.Database }}
+                                    <b>{{ $t('label.databaseName') }}:</b> {{ item.Database }}
                                   </v-col>
                                 </v-row>
                                 <v-row>
                                   <v-col v-if="!!item.Username">
-                                    <b>Username:</b> {{ item.Username }}
+                                    <b>{{ $t('label.username') }}:</b> {{ item.Username }}
                                   </v-col>
                                   <v-col v-if="!!item.Password">
-                                    <b>Password:</b> {{ item.Password }}
+                                    <b>{{ $t('label.password') }}:</b> {{ showPassword ? item.Password : '******' }}
                                   </v-col>
                                   <v-spacer></v-spacer>
                                 </v-row>
@@ -189,50 +152,83 @@
                       </v-card>
                     </template>
                     <div class="ml-n14">
-                      <div>
-                        <v-btn
-                          @click="editConnection(editMode.EDIT, item)"
-                          color="primary"
-                          small
-                          fab
-                        >
-                          <v-icon>mdi-pencil</v-icon>
-                        </v-btn>
-                      </div>
-                      <div>
-                        <v-btn
-                          @click="editConnection(editMode.DELETE, item)"
-                          color="error"
-                          small
-                          fab
-                        >
-                          <v-icon>mdi-delete</v-icon>
-                        </v-btn>
-                      </div>
+                      <v-tooltip left>
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-btn
+                            v-bind="attrs"
+                            v-on="on"
+                            @click="editConnection(editMode.EDIT, item)"
+                            color="primary"
+                            small
+                            fab
+                          >
+                            <v-icon>mdi-pencil</v-icon>
+                          </v-btn>
+                        </template>
+                        <span>{{ $t('label.edit') }}</span>
+                      </v-tooltip>
+                      <v-tooltip left>
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-btn
+                            v-bind="attrs"
+                            v-on="on"
+                            @click="editConnection(editMode.CREATE, item)"
+                            color="success"
+                            small
+                            fab
+                          >
+                            <v-icon>mdi-content-copy</v-icon>
+                          </v-btn>
+                        </template>
+                        <span>{{ $t('label.copy') }}</span>
+                      </v-tooltip>
+                      <v-tooltip left>
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-btn
+                            v-bind="attrs"
+                            v-on="on"
+                            @click="editConnection(editMode.DELETE, item)"
+                            color="error"
+                            small
+                            fab
+                          >
+                            <v-icon>mdi-delete</v-icon>
+                          </v-btn>
+                        </template>
+                        <span>{{ $t('label.delete') }}</span>
+                      </v-tooltip>
                     </div>
                   </v-speed-dial>
                 </v-col>
               </v-row>
             </v-card-text>
           </v-card>
-          <v-btn
-            @click="editConnection(editMode.CREATE)"
-            class="mb-14"
-            color="success"
-            dark
-            absolute
-            bottom
-            left
-            fab
-          >
-            <v-icon>mdi-plus</v-icon>
-          </v-btn>
         </v-card>
+          <v-tooltip top>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                v-bind="attrs"
+                v-on="on"
+                @click="editConnection(editMode.CREATE)"
+                class="mb-14"
+                color="success"
+                dark
+                absolute
+                bottom
+                left
+                fab
+              >
+                <v-icon>mdi-plus</v-icon>
+              </v-btn>
+            </template>
+            <span>{{ $t('label.create') }}</span>
+          </v-tooltip>
       </v-col>
     </v-row>
     <edit-connection-vue
       :mode="mode"
       :data="item"
+      :showPassword.sync="showPassword"
       v-model="showEdit"
       v-on:refresh="refreshConnections"
     ></edit-connection-vue>
@@ -259,14 +255,12 @@ export default {
     },
     editConnection(mode, item) {
       this.mode = mode;
-      // if (this.item) {
-      //   for(var key in this.item) {
-      //     this.$set(this.item, key, item != null ? item[key] : null)
-      //   }
-      // } else {
-      //   this.item = item
-      // }
       this.item = Object.assign({}, item);
+      if (this.mode == this.editMode.CREATE && item != null) {
+        this.item.Id = null
+        this.item.Name = this.item.Name + " " + this.$t('label.aCopy')
+        this.item.Current = false
+      }
       this.showEdit = true;
     },
     refreshConnections() {
@@ -308,6 +302,12 @@ export default {
       } else {
         return (current || hover) ? 'blurIn' : 'blurOut'
       }
+    },
+    getStampTransition(current) {
+      return current ? '' : 'makeStamp'
+    },
+    getMiniStampTransition(current) {
+      return current ? '' : 'makeMiniStamp'
     }
   },
   computed: {
@@ -353,6 +353,7 @@ export default {
       showEdit: false,
       mode: "detail",
       toggleViewMode: 0, // 0: list 1: module
+      showPassword: false,
       item: null,
       search: "",
       dbTypes: [
@@ -389,6 +390,11 @@ export default {
 </script>
 
 <style scoped>
+.v-divider--vertical.short-divider {
+  height: 24px;
+  min-height: 24px;
+}
+
 .select-database:before {
   background-color: transparent !important;
 }
@@ -410,6 +416,14 @@ export default {
   100% {
     transform: translateX(0px);
   }
+}
+
+.slideOut {
+  animation: slideOut 0.4s ease-in-out both;
+}
+
+.slideIn {
+  animation: slideIn 0.4s ease-in-out both;
 }
 
 @keyframes blurOut {
@@ -434,14 +448,6 @@ export default {
   }
 }
 
-.slideOut {
-  animation: slideOut 0.4s ease-in-out both;
-}
-
-.slideIn {
-  animation: slideIn 0.4s ease-in-out both;
-}
-
 .blurOut {
   animation: blurOut 0.3s ease-in-out both;
 }
@@ -449,4 +455,89 @@ export default {
 .blurIn {
   animation: blurIn 0.3s ease-in-out both;
 }
+
+@keyframes makeStamp {
+  0% {
+    filter: blur(2px) opacity(0%);
+    transform: scale(3, 3) rotate(30deg);
+  }
+  100% {
+    filter: blur(0.5px) opacity(80%);
+    transform: scale(1, 1) rotate(30deg);
+  }
+}
+
+.makeStamp {
+  animation: makeStamp 0.3s ease-in-out both;
+}
+
+@keyframes makeMiniStamp {
+  0% {
+    filter: blur(2px) opacity(0%);
+    transform: scale(2, 2) rotate(30deg);
+    z-index: 1;
+  }
+  100% {
+    filter: blur(0.5px) opacity(80%);
+    transform: scale(1, 1) rotate(30deg);
+    z-index: 1;
+  }
+  to {
+    filter: blur(0.5px) opacity(80%);
+    transform: scale(1, 1) rotate(30deg);
+  }
+}
+
+.makeMiniStamp {
+  animation: makeMiniStamp 0.3s ease-in-out both;
+}
+
+.stamp {
+	display: inline-block;
+	border-radius: 20px;
+	border-width: 6px;
+	border-color: #ef3e42;
+	border-style: solid;
+	color: #ef3e42;
+	text-transform: uppercase;
+	margin: 0 auto;
+	font-size: 30px;
+  font-weight: 700;
+	letter-spacing: 0px;
+	padding: 5px 15px;
+  position: absolute;
+  right: -5px;
+  top: 15px;
+	
+	border-image: url(../assets/stamp-texture.png) 30;
+  background: url(../assets/stamp-texture.png) no-repeat center center;
+  background-size: cover;
+  background-clip:text;
+  -webkit-text-fill-color: transparent;
+}
+
+.stamp-mini {
+	display: inline-block;
+	border-radius: 20px;
+	border-width: 4px;
+	border-color: #ef3e42;
+	border-style: solid;
+	color: #ef3e42;
+	text-transform: uppercase;
+	margin: 0 auto;
+	font-size: 18px;
+  font-weight: 700;
+	letter-spacing: 0px;
+	padding: 0px 8px;
+  position: absolute;
+  right: -5px;
+  top: 3px;
+	
+	border-image: url(../assets/stamp-texture.png) 30;
+  background: url(../assets/stamp-texture.png) no-repeat center center;
+  background-size: cover;
+  background-clip:text;
+  -webkit-text-fill-color: transparent;
+}
+
 </style>
