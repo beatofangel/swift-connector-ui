@@ -4,6 +4,7 @@
       <v-form ref="form" @submit.prevent="onSubmit">
         <v-card>
           <v-toolbar>
+    <v-img :src="getBackgroundImage" class="background"></v-img>
             <v-icon>{{ getIcon }}</v-icon>
             <span class="mt-1">{{ getTitle }}</span>
             <v-spacer></v-spacer>
@@ -304,6 +305,18 @@ export default {
         }
       }
     },
+    // getBackgroundImage() {
+    //   if (this.formData && this.formData.databaseType > 0) {
+    //     return `background-image:url('${this.dbTypeBackgrounds[this.formData.databaseType - 1]}');background-position: 40% 40%; filter: blur(2px);`
+    //   }
+    //   return ''
+    // },
+    getBackgroundImage() {
+      if (this.formData && this.formData.databaseType > 0) {
+        return this.dbTypeBackgrounds[this.formData.databaseType - 1]
+      }
+      return ''
+    }
   },
   methods: {
     onClose() {
@@ -386,6 +399,13 @@ export default {
           icon: require("@/assets/icons/database/sqlite_mini_32.png"),
         },
       ],
+      dbTypeBackgrounds: [
+        require("@/assets/icons/database/oracle.svg"),
+        require("@/assets/icons/database/mysql.svg"),
+        require("@/assets/icons/database/sqlserver.svg"),
+        require("@/assets/icons/database/postgresql.svg"),
+        require("@/assets/icons/database/sqlite.svg"),
+      ],
       rules: 
         [{
           databaseType: { required: true },
@@ -451,3 +471,15 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.background {
+  position: absolute;
+  left: 70px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  opacity: 0.5;
+  filter: blur(6px);
+}
+</style>
