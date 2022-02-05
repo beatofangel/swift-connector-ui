@@ -24,6 +24,7 @@
                 >
                   <v-select
                     v-model="formData.databaseType"
+                    :disabled="mode != editMode.CREATE"
                     :items="dbTypes"
                     :menu-props="{ bottom: true, offsetY: true }"
                     :label="$t('label.databaseType')"
@@ -57,6 +58,7 @@
                 >
                   <v-text-field
                     v-model="formData.connectionName"
+                    :disabled="mode == editMode.DELETE || mode == editMode.DETAIL"
                     :label="$t('label.connectionName')"
                     :error-messages="errors[0]"
                     :placeholder="$t('message.ph.connectionName')"
@@ -75,6 +77,7 @@
                 >
                   <v-text-field
                     v-model="formData.host"
+                    :disabled="mode == editMode.DELETE || mode == editMode.DETAIL"
                     :label="$t('label.host')"
                     :error-messages="errors[0]"
                     :placeholder="$t('message.ph.host')"
@@ -93,6 +96,7 @@
                 >
                   <v-text-field
                     v-model="formData.port"
+                    :disabled="mode == editMode.DELETE || mode == editMode.DETAIL"
                     :label="$t('label.port')"
                     :error-messages="errors[0]"
                     :placeholder="$t('message.ph.port')"
@@ -111,6 +115,7 @@
                 >
                   <v-text-field
                     v-model="formData.databaseName"
+                    :disabled="mode == editMode.DELETE || mode == editMode.DETAIL"
                     :label="$t('label.databaseName')"
                     :error-messages="errors[0]"
                     :placeholder="$t('message.ph.databaseName')"
@@ -129,6 +134,7 @@
                 >
                   <v-text-field
                     v-model="formData.username"
+                    :disabled="mode == editMode.DELETE || mode == editMode.DETAIL"
                     :label="$t('label.username')"
                     :error-messages="errors[0]"
                     :placeholder="$t('message.ph.username')"
@@ -147,6 +153,7 @@
                 >
                   <v-text-field
                     v-model="formData.password"
+                    :disabled="mode == editMode.DELETE || mode == editMode.DETAIL"
                     :label="$t('label.password')"
                     :error-messages="errors[0]"
                     :placeholder="$t('message.ph.password')"
@@ -163,6 +170,7 @@
               <v-col class="py-0">
                 <v-switch
                   v-model="formData.protected"
+                  :disabled="mode == editMode.DELETE || mode == editMode.DETAIL"
                   class="mx-3"
                   inset
                   :false-value="protectedMode.NORMAL"
@@ -177,7 +185,7 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn @click="onClose" text>Cancel</v-btn>
-            <v-btn type="submit" :disabled="invalid" color="primary">OK</v-btn>
+            <v-btn v-if="mode == editMode.CREATE || mode == editMode.EDIT || mode == editMode.DELETE" type="submit" :disabled="invalid" color="primary">OK</v-btn>
           </v-card-actions>
         </v-card>
       </v-form>
@@ -193,36 +201,53 @@ export default {
       type: Boolean,
       required: true,
     },
+    data: {
+      Id: String,
+      Type: Number,
+      Name: String,
+      Datasource: String,
+      Port: String,
+      Database: String,
+      Mode: Number,
+      Current: Boolean,
+      Username: String,
+      Password: String,
+      Lastchange: Date
+    },
     mode: String,
   },
   mounted() {
-    window.addConnectionCallback = this.addConnectionCallback
+    window.editConnectionCallback = this.editConnectionCallback
   },
-  methods: {
-    onClose() {
-      this.toggleShow = false
-      this.$refs.form.reset ()
-      this.$refs.observer.reset()
-    },
-    onSubmit() {
-      this.$refs.observer.validate().then(isValid => {
-        if (isValid) {
-          window.chrome.webview.postMessage({
-            api: 'addConnection',
-            callback: 'addConnectionCallback',
-            args: JSON.stringify(this.formData)
-          })
+  watch: {
+    data: {
+      deep: true,
+      handler(newValue) {
+        if (newValue) {
+          this.formData.id = newValue.Id
+          this.formData.databaseType = newValue.Type
+          this.formData.connectionName = newValue.Name
+          this.formData.host = newValue.Datasource
+          this.formData.port = newValue.Port
+          this.formData.databaseName = newValue.Database
+          this.formData.protected = newValue.Mode
+          this.formData.current = newValue.Current
+          this.formData.username = newValue.Username
+          this.formData.password = newValue.Password
+          this.formData.lastChange = newValue.Lastchange
+        } else {
+          this.formData.id = null
+          this.formData.databaseType = null
+          this.formData.connectionName = null
+          this.formData.host = null
+          this.formData.port = null
+          this.formData.databaseName = null
+          this.formData.protected = 0
+          this.formData.current = false
+          this.formData.username = null
+          this.formData.password = null
+          this.formData.lastChange = null
         }
-      })
-    },
-    addConnectionCallback(content) {
-      const result = JSON.parse(content)
-      if (result.Success) {
-        this.$toast.success(this.$t('label.editMode.create').replace('{0}', this.$t('message.success')), { icon: 'mdi-check-circle-outline' })
-        this.onClose()
-      } else {
-        this.$toast.error(this.$t('label.editMode.create').replace('{0}', this.$t('message.failed')), { icon: 'mdi-close-circle-outline' })
-        console.error(result.Message)
       }
     }
   },
@@ -241,7 +266,7 @@ export default {
       switch (this.mode) {
         case this.editMode.DELETE:
           // delete
-          icon = "mdi-close";
+          icon = "mdi-delete";
           break;
         case this.editMode.EDIT:
           // edit
@@ -279,6 +304,58 @@ export default {
         }
       }
     },
+  },
+  methods: {
+    onClose() {
+      this.toggleShow = false
+      // this.$refs.form.reset()
+      this.$refs.observer.reset()
+    },
+    onSubmit() {
+      switch (this.mode) {
+        case this.editMode.CREATE:
+          this.$refs.observer.validate().then(isValid => {
+            if (isValid) {
+              window.chrome.webview.postMessage({
+                api: 'addConnection',
+                callback: 'editConnectionCallback',
+                args: JSON.stringify(this.formData)
+              })
+            }
+          })
+          break;
+        case this.editMode.EDIT:
+          this.$refs.observer.validate().then(isValid => {
+            if (isValid) {
+              window.chrome.webview.postMessage({
+                api: 'editConnection',
+                callback: 'editConnectionCallback',
+                args: JSON.stringify(this.formData)
+              })
+            }
+          })
+          break;
+        case this.editMode.DELETE:
+          window.chrome.webview.postMessage({
+            api: 'deleteConnection',
+            callback: 'editConnectionCallback',
+            args: JSON.stringify(this.formData)
+          })
+          break;
+        default:
+      }
+    },
+    editConnectionCallback(content) {
+      const result = JSON.parse(content)
+      if (result.Success) {
+        this.$toast.success(this.$t(`label.editMode.${this.mode}`).replace('{0}', this.$t('message.success')), { icon: 'mdi-check-circle-outline' })
+        this.$emit('refresh')
+        this.onClose()
+      } else {
+        this.$toast.error(this.$t(`label.editMode.${this.mode}`).replace('{0}', this.$t('message.failed')), { icon: 'mdi-close-circle-outline' })
+        console.error(result.Message)
+      }
+    }
   },
   data() {
     return {
@@ -358,6 +435,7 @@ export default {
       ,
       showPassword: false,
       formData: {
+        id: null,
         databaseType: null,
         connectionName: null,
         host: null,
@@ -366,6 +444,8 @@ export default {
         username: null,
         password: null,
         protected: 0,
+        current: false,
+        lastChange: null,
       },
     };
   },
