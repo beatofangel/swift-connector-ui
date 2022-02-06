@@ -29,15 +29,21 @@ export default {
     MarkdownItVue
   },
   mounted() {
-    window.initChangeLog = this.initChangeLog
+    window.loadChangeLogCallback = this.loadChangeLogCallback
     window.chrome.webview.postMessage({
       api: 'loadChangeLog',
-      callback: 'initChangeLog'
+      callback: 'loadChangeLogCallback'
     })
   },
   methods: {
-    initChangeLog(content) {
-      this.content = content
+    loadChangeLogCallback(content) {
+      const result = JSON.parse(content)
+      if (result.Success) {
+        this.content = result.Data
+      } else {
+        this.$toast.error(this.$t(`message.loadingFailed`), { icon: 'mdi-close-circle-outline' })
+        console.error(result.Message)
+      }
       this.$nextTick(()=>{
         this.attrs.loading = false
       })

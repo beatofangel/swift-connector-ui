@@ -27,13 +27,18 @@
     "protectedMode": "保护模式",
     "normalMode": "普通模式",
     "databaseName": "数据库名",
+    "lastChange": "修改日期",
     "ok": "确定",
     "cancel": "取消",
     "inUse": "使用中",
     "showPassword": "点击显示@:label.password",
     "hidePassword": "点击隐藏@:label.password",
     "listView": "列表视图",
-    "moduleView": "模块视图"
+    "moduleView": "模块视图",
+    "filterDbType": "按@:label.databaseType来过滤",
+    "selectAll": "全选",
+    "sort": "排序",
+    "clear": "清空"
   },
   "message": {
     "loading": "加载中···",
@@ -47,6 +52,8 @@
     },
     "success": "成功",
     "failed": "失败",
+    "loadingSuccess": "载入@:success",
+    "loadingFailed": "载入@:failed",
     "currentConnection": "当前连接",
     "switch2Current": "切换到此{0}",
     "switch": "切换{0}",

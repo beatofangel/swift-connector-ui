@@ -27,13 +27,18 @@
     "protectedMode": "Protected Mode",
     "normalMode": "Normal Mode",
     "databaseName": "Database Name",
+    "lastChange": "Last Modified Date",
     "ok": "ok",
     "cancel": "cancel",
     "inUse": "IN USE",
     "showPassword": "Click to show @:label.password",
     "hidePassword": "Click to hide @:label.password",
     "listView": "List mode",
-    "moduleView": "Module mode"
+    "moduleView": "Module mode",
+    "filterDbType": "Filter by @:label.databaseType",
+    "selectAll": "Select ALL",
+    "sort": "Sort",
+    "clear": "Clear"
   },
   "message": {
     "loading": "Loading...",
@@ -47,6 +52,8 @@
     },
     "success": "success",
     "failed": "failed",
+    "loadingSuccess": "Loading @:success",
+    "loadingFailed": "Loading @:failed",
     "currentConnection": "Current connection",
     "switch2Current": "Switch to this {0}",
     "switch": "switch {0}",
