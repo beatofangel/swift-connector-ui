@@ -16,6 +16,40 @@
                 ></v-text-field>
               </v-col>
               <v-col cols="6" align="right">
+                <v-tooltip top>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-fade-transition>
+                      <v-btn
+                        class="mt-n2"
+                        v-show="toggleViewMode == 0"
+                        @click="showPassword = !showPassword"
+                        v-bind="attrs"
+                        v-on="on"
+                        small
+                        icon
+                      >
+                        <v-icon
+                          :color="showPassword ? 'primary' : 'grey darken-2'"
+                          >{{
+                            showPassword ? "mdi-eye" : "mdi-eye-off"
+                          }}</v-icon
+                        >
+                      </v-btn>
+                    </v-fade-transition>
+                  </template>
+                  <span>{{
+                    showPassword
+                      ? $t("label.hidePassword")
+                      : $t("label.showPassword")
+                  }}</span>
+                </v-tooltip>
+                <v-fade-transition>
+                  <v-divider
+                    v-show="toggleViewMode == 0"
+                    class="mx-2 short-divider"
+                    vertical
+                  ></v-divider>
+                </v-fade-transition>
                 <v-menu
                   transition="scale-transition"
                   origin="center center"
@@ -38,7 +72,7 @@
                       <span>{{ $t("label.sort") }}</span>
                     </v-tooltip>
                   </template>
-                  <v-list>
+                  <v-list dense>
                     <v-list-item @click="clearSortDirections">
                       <v-list-item-content>{{
                         $t("label.clear")
@@ -60,40 +94,6 @@
                   </v-list>
                 </v-menu>
                 <v-divider class="mx-2 short-divider" vertical></v-divider>
-                <v-tooltip top>
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-slide-x-transition>
-                      <v-btn
-                        class="mt-n2"
-                        v-show="toggleViewMode == 0"
-                        @click="showPassword = !showPassword"
-                        v-bind="attrs"
-                        v-on="on"
-                        small
-                        icon
-                      >
-                        <v-icon
-                          :color="showPassword ? 'primary' : 'grey darken-2'"
-                          >{{
-                            showPassword ? "mdi-eye" : "mdi-eye-off"
-                          }}</v-icon
-                        >
-                      </v-btn>
-                    </v-slide-x-transition>
-                  </template>
-                  <span>{{
-                    showPassword
-                      ? $t("label.hidePassword")
-                      : $t("label.showPassword")
-                  }}</span>
-                </v-tooltip>
-                <v-fade-transition>
-                  <v-divider
-                    v-show="toggleViewMode == 0"
-                    class="mx-2 short-divider"
-                    vertical
-                  ></v-divider>
-                </v-fade-transition>
                 <v-menu
                   transition="scale-transition"
                   origin="center center"
@@ -125,26 +125,29 @@
                       <span>{{ $t("label.filterDbType") }}</span>
                     </v-tooltip>
                   </template>
-                  <v-list>
-                    <v-list-item>
-                      <v-list-item-avatar tile>
-                        <div>
-                          <v-img
-                            v-for="(dbType, index) in dbTypes"
-                            :key="index"
-                            :alt="dbType.label"
-                            :src="dbType.icon"
-                            class="ma-0 pa-0"
-                            width="12"
-                          ></v-img>
-                        </div>
+                  <v-list dense>
+                    <v-list-item @click="toggleSelectAllDbTypes">
+                      <v-list-item-avatar style="min-width:30px;width:30px;height:30px;" tile>
+                        <v-row class="ma-0 pa-0">
+                          <v-col class="ma-0 pa-0" 
+                          v-for="(dbType, index) in dbTypes"
+                          :key="index">
+                        <v-img
+                          :alt="dbType.label"
+                          :src="dbType.icon"
+                          class="d-flex ma-0 pa-0"
+                          width="10"
+                          height="10"
+                        ></v-img>
+                          </v-col>
+                          <v-spacer></v-spacer>
+                        </v-row>
                       </v-list-item-avatar>
                       <v-list-item-content>{{
                         $t("label.selectAll")
                       }}</v-list-item-content>
                       <v-list-item-action>
                         <v-checkbox
-                          @click="toggleSelectAllDbTypes"
                           :indeterminate="
                             isDbTypeFiltered && filterDbTypes.length != 0
                           "
@@ -157,8 +160,9 @@
                     <v-list-item
                       v-for="(dbType, index) in dbTypes"
                       :key="index"
+                      @click="toggleSelectDbType(dbType.value)"
                     >
-                      <v-list-item-avatar tile>
+                      <v-list-item-avatar size="30" tile>
                         <v-img :alt="dbType.label" :src="dbType.icon"></v-img>
                       </v-list-item-avatar>
                       <v-list-item-content>{{
@@ -167,7 +171,6 @@
                       <v-list-item-action>
                         <v-checkbox
                           :input-value="!!filterDbTypes.includes(dbType.value)"
-                          @click="toggleSelectDbType(dbType.value)"
                         ></v-checkbox>
                       </v-list-item-action>
                     </v-list-item>
@@ -572,6 +575,7 @@ export default {
     },
     getFilteredItems() {
       const filter = this.search;
+      
       const items = this.records.filter((item) => {
         const dbTypeMatched = this.filterDbTypes.includes(item.Type);
         if (dbTypeMatched) {

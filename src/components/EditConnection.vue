@@ -481,7 +481,7 @@ export default {
 <style scoped>
 .background {
   position: absolute;
-  left: 100px;
+  left: 160px;
   top: 0px;
   width: 100%;
   height: 100%;
