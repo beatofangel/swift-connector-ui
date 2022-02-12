@@ -20,6 +20,7 @@ const routes = [
     path: '/connections',
     name: 'Connections',
     icon: 'mdi-database',
+    solo: true,
     component: () => import('../views/Connections.vue')
   },
   {

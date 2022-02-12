@@ -74,6 +74,7 @@
         <template v-slot:activator="{ on, attrs }">
           <localized-link
             style="text-decoration: none; color: inherit"
+            v-if="!item.solo"
             :to="item.path"
           >
             <v-btn
@@ -103,11 +104,13 @@
 import { mapGetters, mapActions } from "vuex";
 export default {
   created() {
+    document.querySelector('.website-loading').remove();
     this.$router.options.routes.forEach((route) => {
       this.items.push({
         name: route.name,
         path: route.path,
         icon: route.icon,
+        solo: route.solo == true
       });
     });
   },

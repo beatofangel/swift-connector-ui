@@ -11,5 +11,7 @@ module.exports = {
       enableInSFC: true,
       enableBridge: false
     }
-  }
+  },
+
+  publicPath: './'
 }

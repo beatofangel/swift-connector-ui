@@ -362,7 +362,7 @@
                             <v-icon>mdi-pencil</v-icon>
                           </v-btn>
                         </template>
-                        <span>{{ $t("label.edit") }}</span>
+                        <span>{{ getEditBtnLabel }}</span>
                       </v-tooltip>
                       <v-tooltip left>
                         <template v-slot:activator="{ on, attrs }">
@@ -377,7 +377,7 @@
                             <v-icon>mdi-content-copy</v-icon>
                           </v-btn>
                         </template>
-                        <span>{{ $t("label.copy") }}</span>
+                        <span>{{ getCopyBtnLabel }}</span>
                       </v-tooltip>
                       <v-tooltip left>
                         <template v-slot:activator="{ on, attrs }">
@@ -392,7 +392,7 @@
                             <v-icon>mdi-delete</v-icon>
                           </v-btn>
                         </template>
-                        <span>{{ $t("label.delete") }}</span>
+                        <span>{{ getDeleteBtnLabel }}</span>
                       </v-tooltip>
                     </div>
                   </v-speed-dial>
@@ -418,7 +418,7 @@
               <v-icon>mdi-plus</v-icon>
             </v-btn>
           </template>
-          <span>{{ $t("label.create") }}</span>
+          <span>{{ getCreateBtnLabel }}</span>
         </v-tooltip>
       </v-col>
     </v-row>
@@ -474,6 +474,12 @@ export default {
     getAvatar(type) {
       const dbType = this.dbTypes.filter((v) => v.value == type);
       return dbType.length > 0 ? dbType[0].icon : null;
+    },
+    getOperationLabel(operation) {
+      return this.$t("label.editMode." + operation).replace(
+        "{0}",
+        this.$t("label.connection")
+      );
     },
     switch2Current(id) {
       window.chrome.webview.postMessage({
@@ -565,10 +571,16 @@ export default {
   },
   computed: {
     getCreateBtnLabel() {
-      return this.$t("label.editMode." + this.editMode.CREATE).replace(
-        "{0}",
-        this.$t("label.connection")
-      );
+      return this.getOperationLabel("create")
+    },
+    getEditBtnLabel() {
+      return this.getOperationLabel("edit")
+    },
+    getCopyBtnLabel() {
+      return this.getOperationLabel("copy")
+    },
+    getDeleteBtnLabel() {
+      return this.getOperationLabel("delete")
     },
     getSearchLabel() {
       return this.$t("label.search");

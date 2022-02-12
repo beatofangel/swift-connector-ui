@@ -8,7 +8,8 @@
       "detail": "{0}@:label.detail",
       "create": "@:label.create{0}",
       "edit": "@:label.edit{0}",
-      "delete": "@:label.delete{0}"
+      "delete": "@:label.delete{0}",
+      "copy": "@:label.copy{0}"
     },
     "search": "查询",
     "create": "新建",
