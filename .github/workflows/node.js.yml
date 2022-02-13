@@ -21,7 +21,7 @@ jobs:
 
     steps:
     - name: checkout
-    - uses: actions/checkout@v2
+      uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
@@ -30,8 +30,9 @@ jobs:
       env:
         my_token: ${{ secrets.G_TOKEN }}
     - name: install and build
-    - run: npm ci
-    - run: npm run build --if-present
+      run: |
+        npm ci
+        npm run build --if-present
     - name: deploy
       run: |
         git config --global user.email "beatofangel@gmx.com"
