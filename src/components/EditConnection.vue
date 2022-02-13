@@ -188,7 +188,7 @@
           </v-card-text>
           <v-divider></v-divider>
           <v-card-actions>
-            <v-btn @click="onTestConnection" color="secondary">{{ $t('label.testConnection') }}</v-btn>
+            <v-btn @click="onTestConnection" icon="mdi-connection" color="secondary">{{ $t('label.testConnection') }}</v-btn>
             <v-spacer></v-spacer>
             <v-btn @click="onClose" text>{{ $t('label.cancel') }}</v-btn>
             <v-btn v-if="mode && mode != editMode.DETAIL" type="submit" :disabled="invalid" color="primary">{{ $t('label.ok') }}</v-btn>
@@ -387,13 +387,19 @@ export default {
     editConnectionCallback(content) {
       const result = JSON.parse(content)
       if (result.Success) {
-        this.$toast.success(this.$t(`label.editMode.${this.getAlternativeMode}`).replace('{0}', this.$t('message.success')), { icon: 'mdi-check-circle-outline' })
-        this.$emit('refresh')
-        if (result.Api != 'testConnection') {
+        if (result.Api == 'testConnection') {
+          this.$toast.success(this.$t('message.success'), { icon: 'mdi-check-circle-outline' })
+        } else {
+          this.$toast.success(this.$t(`label.editMode.${this.getAlternativeMode}`).replace('{0}', this.$t('message.success')), { icon: 'mdi-check-circle-outline' })
+          this.$emit('refresh')
           this.onClose()
         }
       } else {
-        this.$toast.error(this.$t(`label.editMode.${this.getAlternativeMode}`).replace('{0}', this.$t('message.failed')), { icon: 'mdi-close-circle-outline' })
+        if (result.Api == 'testConnection') {
+          this.$toast.error(result.Message, { icon: 'mdi-close-circle-outline' })
+        } else {
+          this.$toast.error(this.$t(`label.editMode.${this.getAlternativeMode}`).replace('{0}', this.$t('message.failed')), { icon: 'mdi-close-circle-outline' })
+        }
         console.error(result.Message)
       }
     }
@@ -494,6 +500,7 @@ export default {
         current: false,
         lastChange: null,
       },
+      isValidConnection: null
     };
   },
 };
