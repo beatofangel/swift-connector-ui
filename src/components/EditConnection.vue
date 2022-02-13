@@ -188,7 +188,7 @@
           </v-card-text>
           <v-divider></v-divider>
           <v-card-actions>
-            <v-btn color="secondary">{{ $t('label.testConnection') }}</v-btn>
+            <v-btn @click="onTestConnection" color="secondary">{{ $t('label.testConnection') }}</v-btn>
             <v-spacer></v-spacer>
             <v-btn @click="onClose" text>{{ $t('label.cancel') }}</v-btn>
             <v-btn v-if="mode == editMode.CREATE || mode == editMode.EDIT || mode == editMode.DELETE" type="submit" :disabled="invalid" color="primary">{{ $t('label.ok') }}</v-btn>
@@ -332,6 +332,17 @@ export default {
       // this.$refs.form.reset()
       this.$refs.observer.reset()
     },
+    onTestConnection() {
+      this.$refs.observer.validate().then(isValid => {
+        if (isValid) {
+          window.chrome.webview.postMessage({
+            api: 'testConnection',
+            callback: 'editConnectionCallback',
+            args: JSON.stringify(this.formData)
+          })
+        }
+      })
+    },
     onSubmit() {
       switch (this.mode) {
         case this.editMode.CREATE:
@@ -371,7 +382,9 @@ export default {
       if (result.Success) {
         this.$toast.success(this.$t(`label.editMode.${this.mode}`).replace('{0}', this.$t('message.success')), { icon: 'mdi-check-circle-outline' })
         this.$emit('refresh')
-        this.onClose()
+        if (result.Api != 'testConnection') {
+          this.onClose()
+        }
       } else {
         this.$toast.error(this.$t(`label.editMode.${this.mode}`).replace('{0}', this.$t('message.failed')), { icon: 'mdi-close-circle-outline' })
         console.error(result.Message)
