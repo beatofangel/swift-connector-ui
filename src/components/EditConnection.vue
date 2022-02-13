@@ -188,7 +188,7 @@
           </v-card-text>
           <v-divider></v-divider>
           <v-card-actions>
-            <v-btn @click="onTestConnection" :loading="processing.testConnection" :disabled="shouldDisable" append-icon="mdi-connection" color="secondary">{{ $t('label.testConnection') }}</v-btn>
+            <v-btn @click="onTestConnection" :loading="processing.testConnection" :disabled="shouldDisable" color="secondary">{{ $t('label.testConnection') }}<v-icon right>mdi-connection</v-icon></v-btn>
             <v-spacer></v-spacer>
             <v-btn @click="onClose" :disabled="shouldDisable" text>{{ $t('label.cancel') }}</v-btn>
             <v-btn v-if="mode && mode != editMode.DETAIL" type="submit" :loading="processing.submit" :disabled="invalid || shouldDisable" color="primary">{{ $t('label.ok') }}</v-btn>
