@@ -23,7 +23,7 @@ jobs:
     - name: checkout
       uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
     - name: install and build
@@ -31,8 +31,8 @@ jobs:
         npm ci
         npm run build --if-present
     - name: deploy
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # env:
+        # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         git config --global user.email "beatofangel@gmx.com"
         git config --global user.name "beatofangel"
@@ -40,4 +40,10 @@ jobs:
         git init
         git add -A .
         git commit -m "GitHub Actions Auto Builder at $(date +'%Y-%m-%d %H:%M:%S')"
-        git push --force --quiet "https://$GITHUB_TOKEN@github.com/beatofangel/swift-connector-ui-release.git" master:master
+        # git push --force --quiet "https://$GITHUB_TOKEN@github.com/beatofangel/swift-connector-ui-release.git" master:master
+    - name: push
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        force: true
+        repository: swift-connector-ui-release.git
