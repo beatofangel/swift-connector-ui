@@ -27,7 +27,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
       env:
-        my_token: ${{ secrets.GITHUB_TOKEN }}
+        my_token: ${{ secrets.scu_token }}
     - name: install and build
       run: |
         npm ci
