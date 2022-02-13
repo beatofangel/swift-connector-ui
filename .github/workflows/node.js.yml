@@ -28,7 +28,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
       env:
-        my_token: ${{ secrets.G_TOKEN }}
+        my_token: ${{ secrets.GITHUB_TOKEN }}
     - name: install and build
       run: |
         npm ci
