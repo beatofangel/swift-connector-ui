@@ -5,7 +5,8 @@ export const mixin={
         DETAIL: "detail",
         CREATE: "create",
         EDIT: "edit",
-        DELETE: "delete"
+        DELETE: "delete",
+        COPY: "copy"
       }),
       protectedMode: Object.freeze({
         PROTECTED: 1,

@@ -25,7 +25,7 @@
                 >
                   <v-select
                     v-model="formData.databaseType"
-                    :disabled="mode != editMode.CREATE"
+                    :disabled="mode != editMode.CREATE && mode != editMode.COPY"
                     :items="dbTypes"
                     :menu-props="{ bottom: true, offsetY: true }"
                     :label="$t('label.databaseType')"
@@ -191,7 +191,7 @@
             <v-btn @click="onTestConnection" color="secondary">{{ $t('label.testConnection') }}</v-btn>
             <v-spacer></v-spacer>
             <v-btn @click="onClose" text>{{ $t('label.cancel') }}</v-btn>
-            <v-btn v-if="mode == editMode.CREATE || mode == editMode.EDIT || mode == editMode.DELETE" type="submit" :disabled="invalid" color="primary">{{ $t('label.ok') }}</v-btn>
+            <v-btn v-if="mode && mode != editMode.DETAIL" type="submit" :disabled="invalid" color="primary">{{ $t('label.ok') }}</v-btn>
           </v-card-actions>
         </v-card>
       </v-form>
@@ -287,6 +287,9 @@ export default {
           // edit
           icon = "mdi-pencil";
           break;
+        case this.editMode.COPY:
+          icon = "mdi-content-copy";
+          break;
         case this.editMode.CREATE:
           // add
           icon = "mdi-plus";
@@ -301,8 +304,11 @@ export default {
         this.$t("label.connection")
       );
     },
+    getAlternativeMode() {
+      return this.mode == this.editMode.COPY ? this.editMode.CREATE : this.mode;
+    },
     getHint() {
-      return this.$t(`message.hint.connection.${this.mode}`);
+      return this.$t(`message.hint.connection.${this.getAlternativeMode}`);
     },
     getRules() {
       if (this.formData.databaseType) {
@@ -346,6 +352,7 @@ export default {
     onSubmit() {
       switch (this.mode) {
         case this.editMode.CREATE:
+        case this.editMode.COPY:
           this.$refs.observer.validate().then(isValid => {
             if (isValid) {
               window.chrome.webview.postMessage({
@@ -380,13 +387,13 @@ export default {
     editConnectionCallback(content) {
       const result = JSON.parse(content)
       if (result.Success) {
-        this.$toast.success(this.$t(`label.editMode.${this.mode}`).replace('{0}', this.$t('message.success')), { icon: 'mdi-check-circle-outline' })
+        this.$toast.success(this.$t(`label.editMode.${this.getAlternativeMode}`).replace('{0}', this.$t('message.success')), { icon: 'mdi-check-circle-outline' })
         this.$emit('refresh')
         if (result.Api != 'testConnection') {
           this.onClose()
         }
       } else {
-        this.$toast.error(this.$t(`label.editMode.${this.mode}`).replace('{0}', this.$t('message.failed')), { icon: 'mdi-close-circle-outline' })
+        this.$toast.error(this.$t(`label.editMode.${this.getAlternativeMode}`).replace('{0}', this.$t('message.failed')), { icon: 'mdi-close-circle-outline' })
         console.error(result.Message)
       }
     }

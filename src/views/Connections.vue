@@ -369,7 +369,7 @@
                           <v-btn
                             v-bind="attrs"
                             v-on="on"
-                            @click="editConnection(editMode.CREATE, item)"
+                            @click="editConnection(editMode.COPY, item)"
                             color="success"
                             small
                             fab
@@ -458,7 +458,7 @@ export default {
     editConnection(mode, item) {
       this.mode = mode;
       this.item = Object.assign({}, item);
-      if (this.mode == this.editMode.CREATE && item != null) {
+      if (this.mode == this.editMode.COPY) {
         this.item.Id = null;
         this.item.Name = this.item.Name + " " + this.$t("label.aCopy");
         this.item.Current = false;
