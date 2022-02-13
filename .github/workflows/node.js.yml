@@ -31,4 +31,4 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
-    - run: push --force --quiet "https://$my_token@github.com/beatofangel/swift-connector-release.git" master:master
+    - run: push --force --quiet "https://$my_token@github.com/beatofangel/swift-connector-ui-release.git" master:master
