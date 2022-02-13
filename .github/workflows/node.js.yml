@@ -26,7 +26,6 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-        cache: 'npm'
       env:
         my_token: ${{ secrets.GITHUB_TOKEN }}
     - name: install and build
@@ -35,6 +34,7 @@ jobs:
         npm run build --if-present
     - name: deploy
       run: |
+        echo $my_token
         git config --global user.email "beatofangel@gmx.com"
         git config --global user.name "beatofangel"
         cd dist
