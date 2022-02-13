@@ -8,7 +8,7 @@
             <v-icon>{{ getIcon }}</v-icon>
             <span class="mt-1">{{ getTitle }}</span>
             <v-spacer></v-spacer>
-            <v-btn @click="onClose" fab plain x-small>
+            <v-btn @click="onClose" :disabled="shouldDisable" fab plain x-small>
               <v-icon>mdi-close</v-icon>
             </v-btn>
           </v-toolbar>
@@ -25,7 +25,7 @@
                 >
                   <v-select
                     v-model="formData.databaseType"
-                    :disabled="mode != editMode.CREATE && mode != editMode.COPY"
+                    :disabled="mode != editMode.CREATE && mode != editMode.COPY || shouldDisable"
                     :items="dbTypes"
                     :menu-props="{ bottom: true, offsetY: true }"
                     :label="$t('label.databaseType')"
@@ -59,7 +59,7 @@
                 >
                   <v-text-field
                     v-model="formData.connectionName"
-                    :disabled="mode == editMode.DELETE || mode == editMode.DETAIL"
+                    :disabled="mode == editMode.DELETE || mode == editMode.DETAIL || shouldDisable"
                     :label="$t('label.connectionName')"
                     :error-messages="errors[0]"
                     :placeholder="$t('message.ph.connectionName')"
@@ -78,7 +78,7 @@
                 >
                   <v-text-field
                     v-model="formData.host"
-                    :disabled="mode == editMode.DELETE || mode == editMode.DETAIL"
+                    :disabled="mode == editMode.DELETE || mode == editMode.DETAIL || shouldDisable"
                     :label="$t('label.host')"
                     :error-messages="errors[0]"
                     :placeholder="$t('message.ph.host')"
@@ -97,7 +97,7 @@
                 >
                   <v-text-field
                     v-model="formData.port"
-                    :disabled="mode == editMode.DELETE || mode == editMode.DETAIL"
+                    :disabled="mode == editMode.DELETE || mode == editMode.DETAIL || shouldDisable"
                     :label="$t('label.port')"
                     :error-messages="errors[0]"
                     :placeholder="$t('message.ph.port')"
@@ -116,7 +116,7 @@
                 >
                   <v-text-field
                     v-model="formData.databaseName"
-                    :disabled="mode == editMode.DELETE || mode == editMode.DETAIL"
+                    :disabled="mode == editMode.DELETE || mode == editMode.DETAIL || shouldDisable"
                     :label="$t('label.databaseName')"
                     :error-messages="errors[0]"
                     :placeholder="$t('message.ph.databaseName')"
@@ -135,7 +135,7 @@
                 >
                   <v-text-field
                     v-model="formData.username"
-                    :disabled="mode == editMode.DELETE || mode == editMode.DETAIL"
+                    :disabled="mode == editMode.DELETE || mode == editMode.DETAIL || shouldDisable"
                     :label="$t('label.username')"
                     :error-messages="errors[0]"
                     :placeholder="$t('message.ph.username')"
@@ -154,7 +154,7 @@
                 >
                   <v-text-field
                     v-model="formData.password"
-                    :disabled="mode == editMode.DELETE || mode == editMode.DETAIL"
+                    :disabled="mode == editMode.DELETE || mode == editMode.DETAIL || shouldDisable"
                     :label="$t('label.password')"
                     :error-messages="errors[0]"
                     :placeholder="$t('message.ph.password')"
@@ -175,7 +175,7 @@
               <v-col class="py-0">
                 <v-switch
                   v-model="formData.protected"
-                  :disabled="mode == editMode.DELETE || mode == editMode.DETAIL"
+                  :disabled="mode == editMode.DELETE || mode == editMode.DETAIL || shouldDisable"
                   class="mx-3"
                   inset
                   :false-value="protectedMode.NORMAL"
@@ -188,10 +188,10 @@
           </v-card-text>
           <v-divider></v-divider>
           <v-card-actions>
-            <v-btn @click="onTestConnection" icon="mdi-connection" color="secondary">{{ $t('label.testConnection') }}</v-btn>
+            <v-btn @click="onTestConnection" :loading="processing.testConnection" :disabled="shouldDisable" append-icon="mdi-connection" color="secondary">{{ $t('label.testConnection') }}</v-btn>
             <v-spacer></v-spacer>
-            <v-btn @click="onClose" text>{{ $t('label.cancel') }}</v-btn>
-            <v-btn v-if="mode && mode != editMode.DETAIL" type="submit" :disabled="invalid" color="primary">{{ $t('label.ok') }}</v-btn>
+            <v-btn @click="onClose" :disabled="shouldDisable" text>{{ $t('label.cancel') }}</v-btn>
+            <v-btn v-if="mode && mode != editMode.DETAIL" type="submit" :loading="processing.submit" :disabled="invalid || shouldDisable" color="primary">{{ $t('label.ok') }}</v-btn>
           </v-card-actions>
         </v-card>
       </v-form>
@@ -330,6 +330,12 @@ export default {
         return this.dbTypeBackgrounds[this.formData.databaseType - 1]
       }
       return ''
+    },
+    shouldDisable() {
+      for (const key in this.processing) {
+        if (this.processing[key]) return true;
+      }
+      return false
     }
   },
   methods: {
@@ -339,6 +345,7 @@ export default {
       this.$refs.observer.reset()
     },
     onTestConnection() {
+      this.processing.testConnection = true
       this.$refs.observer.validate().then(isValid => {
         if (isValid) {
           window.chrome.webview.postMessage({
@@ -346,10 +353,13 @@ export default {
             callback: 'editConnectionCallback',
             args: JSON.stringify(this.formData)
           })
+        } else {
+          this.processing.testConnection = false
         }
       })
     },
     onSubmit() {
+      this.processing.submit = true
       switch (this.mode) {
         case this.editMode.CREATE:
         case this.editMode.COPY:
@@ -360,6 +370,8 @@ export default {
                 callback: 'editConnectionCallback',
                 args: JSON.stringify(this.formData)
               })
+            } else {
+              this.processing.submit = false
             }
           })
           break;
@@ -371,6 +383,8 @@ export default {
                 callback: 'editConnectionCallback',
                 args: JSON.stringify(this.formData)
               })
+            } else {
+              this.processing.submit = false
             }
           })
           break;
@@ -384,7 +398,13 @@ export default {
         default:
       }
     },
+    clearProcessing() {
+      Object.keys(this.processing).forEach(key => {
+        this.processing[key] = false
+      })
+    },
     editConnectionCallback(content) {
+      this.clearProcessing()
       const result = JSON.parse(content)
       if (result.Success) {
         if (result.Api == 'testConnection') {
@@ -500,7 +520,7 @@ export default {
         current: false,
         lastChange: null,
       },
-      isValidConnection: null
+      processing: {}
     };
   },
 };
