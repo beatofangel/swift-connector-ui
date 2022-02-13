@@ -39,7 +39,8 @@
     "filterDbType": "Filter by @:label.databaseType",
     "selectAll": "Select ALL",
     "sort": "Sort",
-    "clear": "Clear"
+    "clear": "Clear",
+    "testConnection": "Test connection"
   },
   "message": {
     "loading": "Loading...",

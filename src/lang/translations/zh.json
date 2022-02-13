@@ -39,7 +39,8 @@
     "filterDbType": "按@:label.databaseType来过滤",
     "selectAll": "全选",
     "sort": "排序",
-    "clear": "清空"
+    "clear": "清空",
+    "testConnection": "测试连接"
   },
   "message": {
     "loading": "加载中···",

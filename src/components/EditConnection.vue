@@ -188,6 +188,7 @@
           </v-card-text>
           <v-divider></v-divider>
           <v-card-actions>
+            <v-btn color="secondary">{{ $t('label.testConnection') }}</v-btn>
             <v-spacer></v-spacer>
             <v-btn @click="onClose" text>{{ $t('label.cancel') }}</v-btn>
             <v-btn v-if="mode == editMode.CREATE || mode == editMode.EDIT || mode == editMode.DELETE" type="submit" :disabled="invalid" color="primary">{{ $t('label.ok') }}</v-btn>
