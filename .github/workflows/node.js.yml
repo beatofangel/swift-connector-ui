@@ -42,7 +42,7 @@ jobs:
         git commit -m "GitHub Actions Auto Builder at $(date +'%Y-%m-%d %H:%M:%S')"
         # git push --force --quiet "https://$GITHUB_TOKEN@github.com/beatofangel/swift-connector-ui-release.git" master:master
     - name: push
-      uses: ad-m/github-push-action@v2
+      uses: ad-m/github-push-action@v0.6.0
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         force: true
