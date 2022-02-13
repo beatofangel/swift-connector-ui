@@ -31,4 +31,6 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
+    - run: cd dist && git init && git add .
+    - run: git commit -m "GitHub Actions Auto Builder at $(date +'%Y-%m-%d %H:%M:%S')"
     - run: push --force --quiet "https://$my_token@github.com/beatofangel/swift-connector-ui-release.git" master:master
