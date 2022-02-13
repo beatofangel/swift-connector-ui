@@ -32,7 +32,7 @@ jobs:
         npm run build --if-present
     - name: deploy
       env:
-        my_token: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         git config --global user.email "beatofangel@gmx.com"
         git config --global user.name "beatofangel"
@@ -40,4 +40,4 @@ jobs:
         git init
         git add -A .
         git commit -m "GitHub Actions Auto Builder at $(date +'%Y-%m-%d %H:%M:%S')"
-        git push --force --quiet "https://$my_token@github.com/beatofangel/swift-connector-ui-release.git" master:master
+        git push --force --quiet "https://$GITHUB_TOKEN@github.com/beatofangel/swift-connector-ui-release.git" master:master
