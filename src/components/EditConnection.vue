@@ -163,7 +163,7 @@
                     dense
                   >
                     <template v-slot:append>
-                      <v-icon :color="showPassword ? 'primary' : 'grey darken-2'" @click="updateShowPassword =! showPassword">
+                      <v-icon :color="showPassword ? 'primary' : 'grey darken-2'" :disabled="mode == editMode.DELETE || mode == editMode.DETAIL || shouldDisable" @click="updateShowPassword =! showPassword">
                         {{ showPassword ? 'mdi-eye' : 'mdi-eye-off' }}
                       </v-icon>
                     </template>
@@ -520,7 +520,10 @@ export default {
         current: false,
         lastChange: null,
       },
-      processing: {}
+      processing: {
+        testConnection: false,
+        submit: false
+      }
     };
   },
 };
