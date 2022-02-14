@@ -110,7 +110,7 @@ export default {
         name: route.name,
         path: route.path,
         icon: route.icon,
-        solo: route.solo == true
+        solo: route.solo == true || (this.appAccess && route.path === '/')
       });
     });
   },
