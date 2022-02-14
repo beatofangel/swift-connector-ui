@@ -1,0 +1,73 @@
+{
+  "label": {
+    "name": "Swift Connector",
+    "about": "@:label.nameについて",
+    "changelog": "チェンジログ",
+    "connections": "接続",
+    "home": "ホーム",
+    "editMode": {
+      "detail": "{0}の@:label.detail",
+      "create": "{0}の@:label.create",
+      "edit": "{0}の@:label.edit",
+      "delete": "{0}の@:label.delete",
+      "copy": "{0}の@:label.copy"
+    },
+    "search": "検索",
+    "create": "新規作成",
+    "edit": "変更",
+    "delete": "削除",
+    "copy": "コピー新規",
+    "detail": "詳細",
+    "aCopy": "コピー",
+    "connection": "接続",
+    "databaseType": "データベースタイプ",
+    "connectionName": "接続名",
+    "host": "ホスト",
+    "port": "ポート",
+    "username": "ユーザー名",
+    "password": "パスワード",
+    "protectedMode": "保護モード",
+    "normalMode": "通常モード",
+    "databaseName": "データベース名",
+    "lastChange": "最終更新日",
+    "ok": "はい",
+    "cancel": "キャンセル",
+    "inUse": "使用中",
+    "showPassword": "@:label.password表示",
+    "hidePassword": "@:label.password非表示",
+    "listView": "リストに表示",
+    "moduleView": "モジュールに表示",
+    "filterDbType": "@:label.databaseTypeでフィルタリング",
+    "selectAll": "すべて選択",
+    "sort": "ソート",
+    "clear": "クリア",
+    "testConnection": "接続のテスト"
+  },
+  "message": {
+    "loading": "読み込み中・・・",
+    "hint": {
+      "connection": {
+        "detail": "@:label.connectionの詳細情報を表示します。",
+        "create": "新しい@:label.connectionを作成して、データベースに簡単にアクセスできるようにします。",
+        "edit": "@:label.connectionの一部（@:label.connectionName、@:label.username、@:label.passwordなど）はいつでも変更できます。",
+        "delete": "@:label.connectionが削除されると、回復できないことに注意してください。"
+      }
+    },
+    "success": "成功",
+    "failed": "失敗",
+    "loadingSuccess": "読み込みに@:message.successしました",
+    "loadingFailed": "読み込みに@:message.failedしました",
+    "currentConnection": "現在の接続",
+    "switch2Current": "この{0}に切り替えます",
+    "switch": "{0}を切り替えます",
+    "ph": {
+      "databaseType": "@:label.databaseTypeを選択してください",
+      "connectionName": "@:label.connectionNameを入力してください",
+      "host": "@:label.hostを入力してください",
+      "port": "@:label.portを入力してください",
+      "username": "@:label.usernameを入力してください",
+      "password": "@:label.passwordを入力してください",
+      "databaseName": "@:label.databaseNameを入力してください"
+    }
+  }
+}

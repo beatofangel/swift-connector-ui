@@ -1,6 +1,7 @@
 {
   "label": {
-    "about": "About",
+    "name": "Swift Connector",
+    "about": "About @:label.name",
     "changelog": "Changelog",
     "connections": "Connections",
     "home": "Home",
@@ -32,8 +33,8 @@
     "ok": "ok",
     "cancel": "cancel",
     "inUse": "IN USE",
-    "showPassword": "Click to show @:label.password",
-    "hidePassword": "Click to hide @:label.password",
+    "showPassword": "Show @:label.password",
+    "hidePassword": "Hide @:label.password",
     "listView": "List mode",
     "moduleView": "Module mode",
     "filterDbType": "Filter by @:label.databaseType",
@@ -47,8 +48,8 @@
     "hint": {
       "connection": {
         "detail": "Display detail information of @:label.connection .",
-        "create": "Create a new @:label.connection，allowing you to easily access the database.",
-        "edit": "You can modify parts of the @:label.connection (e.g., @:label.connectionName、@:label.username、@:label.password) at any time.",
+        "create": "Create a new @:label.connection, allowing you to easily access the database.",
+        "edit": "You can modify parts of the @:label.connection (e.g. @:label.connectionName, @:label.username, @:label.password) at any time.",
         "delete": "Note that once a @:label.connection is deleted, it cannot be restored!"
       }
     },
@@ -66,7 +67,7 @@
       "port": "Please input @:label.port",
       "username": "Please input @:label.username",
       "password": "Please input @:label.password",
-      "database": "Please input @:label.databaseName"
+      "databaseName": "Please input @:label.databaseName"
     }
   }
 }

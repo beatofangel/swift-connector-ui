@@ -61,7 +61,7 @@
     </v-system-bar>
     <v-navigation-drawer
       v-model="drawer"
-      v-if="getShowNavi"
+      v-if="getShowNavi && appAccess"
       app
       class="pt-4 text-center"
       color="grey lighten-3"
@@ -115,8 +115,13 @@ export default {
     });
   },
   mounted() {
+    window.platformVerifyCallback = this.platformVerifyCallback;
     window.navigateTo = this.navigateTo;
     this.taskPaneMode = window.taskPaneMode;
+    window.chrome.webview.postMessage({
+      api: "platformVerify",
+      callback: "platformVerifyCallback"
+    });
   },
   computed: {
     ...mapGetters(["getShowNavi", "getShowCtrlBox", "windowSize"]),
@@ -125,6 +130,10 @@ export default {
     ...mapActions(["maximize", "restore"]),
     isCurrent(path) {
       return this.$router.currentRoute.path === "/" + this.$i18n.locale + path;
+    },
+    platformVerifyCallback() {
+      console.log('switch to app mode')
+      this.appAccess = true
     },
     navigateTo(path) {
       if (this.$router.currentRoute.path !== path) {
@@ -159,6 +168,7 @@ export default {
       items: [],
       drawer: null,
       taskPaneMode: true,
+      appAccess: false,
     };
   },
 };

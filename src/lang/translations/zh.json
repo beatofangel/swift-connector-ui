@@ -1,6 +1,7 @@
 {
   "label": {
-    "about": "关于",
+    "name": "Swift Connector",
+    "about": "关于@:label.name",
     "changelog": "变更日志",
     "connections": "连接列表",
     "home": "首页",
@@ -36,7 +37,7 @@
     "hidePassword": "点击隐藏@:label.password",
     "listView": "列表视图",
     "moduleView": "模块视图",
-    "filterDbType": "按@:label.databaseType来过滤",
+    "filterDbType": "过滤@:label.databaseType",
     "selectAll": "全选",
     "sort": "排序",
     "clear": "清空",
