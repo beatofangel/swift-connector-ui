@@ -74,7 +74,7 @@
         <template v-slot:activator="{ on, attrs }">
           <localized-link
             style="text-decoration: none; color: inherit"
-            v-if="!item.solo"
+            v-if="!item.solo && !(appAccess && item.path === '/')"
             :to="item.path"
           >
             <v-btn
@@ -110,7 +110,7 @@ export default {
         name: route.name,
         path: route.path,
         icon: route.icon,
-        solo: route.solo == true || (this.appAccess && route.path === '/')
+        solo: route.solo == true
       });
     });
   },
