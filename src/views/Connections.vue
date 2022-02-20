@@ -21,7 +21,7 @@
                     <v-fade-transition>
                       <v-btn
                         class="mt-n2"
-                        v-show="toggleViewMode == 0"
+                        v-show="toggleViewMode == ViewMode.LIST"
                         @click="showPassword = !showPassword"
                         v-bind="attrs"
                         v-on="on"
@@ -45,7 +45,7 @@
                 </v-tooltip>
                 <v-fade-transition>
                   <v-divider
-                    v-show="toggleViewMode == 0"
+                    v-show="toggleViewMode == ViewMode.LIST"
                     class="mx-2 short-divider"
                     vertical
                   ></v-divider>
@@ -87,7 +87,7 @@
                       <v-list-item-content>{{
                         item.label
                       }}</v-list-item-content>
-                      <v-list-item-action>
+                      <v-list-item-action class="my-2">
                         <v-icon>{{ calcSortIcon(key, item.icon) }}</v-icon>
                       </v-list-item-action>
                     </v-list-item>
@@ -130,11 +130,11 @@
                       <v-list-item-avatar style="min-width:30px;width:30px;height:30px;" tile>
                         <v-row class="ma-0 pa-0">
                           <v-col class="ma-0 pa-0" 
-                          v-for="(dbType, index) in dbTypes"
+                          v-for="(dbDef, index) in DbDef"
                           :key="index">
                         <v-img
-                          :alt="dbType.label"
-                          :src="dbType.icon"
+                          :alt="dbDef.label"
+                          :src="dbDef.icon32"
                           class="d-flex ma-0 pa-0"
                           width="10"
                           height="10"
@@ -158,19 +158,19 @@
                     </v-list-item>
                     <v-divider></v-divider>
                     <v-list-item
-                      v-for="(dbType, index) in dbTypes"
+                      v-for="(def, index) in DbDef"
                       :key="index"
-                      @click="toggleSelectDbType(dbType.value)"
+                      @click="toggleSelectDbType(def.value)"
                     >
                       <v-list-item-avatar size="30" tile>
-                        <v-img :alt="dbType.label" :src="dbType.icon"></v-img>
+                        <v-img :alt="def.label" :src="def.icon32"></v-img>
                       </v-list-item-avatar>
                       <v-list-item-content>{{
-                        dbType.label
+                        def.label
                       }}</v-list-item-content>
                       <v-list-item-action>
                         <v-checkbox
-                          :input-value="!!filterDbTypes.includes(dbType.value)"
+                          :input-value="!!filterDbTypes.includes(def.value)"
                         ></v-checkbox>
                       </v-list-item-action>
                     </v-list-item>
@@ -208,7 +208,7 @@
                 <v-col
                   v-for="item in getFilteredItems"
                   :key="item.Id"
-                  :cols="toggleViewMode == 0 ? 12 : getResponsiveColumns"
+                  :cols="toggleViewMode == ViewMode.LIST ? 12 : getResponsiveColumns"
                 >
                   <v-speed-dial
                     :id="item.Id"
@@ -222,14 +222,14 @@
                         :elevation="item.Current ? '8' : '2'"
                       >
                         <div
-                          v-if="item.Current && toggleViewMode == 1"
+                          v-if="item.Current && toggleViewMode == ViewMode.MODULE"
                           :class="`stamp-mini ${getMiniStampTransition(
                             item.current
                           )}`"
                         >
                           {{ $t("label.inUse") }}
                         </div>
-                        <v-row v-if="toggleViewMode == 1" class="">
+                        <v-row v-if="toggleViewMode == ViewMode.MODULE" class="">
                           <v-col
                             cols="10"
                             class="mx-2 text-h5 overflow-x-hidden"
@@ -242,10 +242,10 @@
                             >
                           </v-col>
                         </v-row>
-                        <v-row :class="toggleViewMode == 1 ? 'mt-n6' : null">
+                        <v-row :class="toggleViewMode == ViewMode.MODULE ? 'mt-n6' : null">
                           <v-col
-                            :cols="toggleViewMode == 0 ? 4 : 12"
-                            :class="toggleViewMode == 0 ? 'pr-0' : null"
+                            :cols="toggleViewMode == ViewMode.LIST ? 4 : 12"
+                            :class="toggleViewMode == ViewMode.LIST ? 'pr-0' : null"
                           >
                             <v-tooltip :disabled="item.Current" top>
                               <template v-slot:activator="{ on, attrs }">
@@ -254,7 +254,7 @@
                                     @click="
                                       item.Current
                                         ? null
-                                        : switch2Current(item.Id)
+                                        : switch2Current(item)
                                     "
                                     :ripple="false"
                                     class="overflow-x-hidden select-database"
@@ -289,7 +289,7 @@
                             </v-tooltip>
                           </v-col>
                           <v-col
-                            v-if="toggleViewMode == 0"
+                            v-if="toggleViewMode == ViewMode.LIST"
                             cols="8"
                             class="pl-0"
                           >
@@ -354,7 +354,7 @@
                           <v-btn
                             v-bind="attrs"
                             v-on="on"
-                            @click="editConnection(editMode.EDIT, item)"
+                            @click="editConnection(EditMode.EDIT, item)"
                             color="primary"
                             small
                             fab
@@ -369,7 +369,7 @@
                           <v-btn
                             v-bind="attrs"
                             v-on="on"
-                            @click="editConnection(editMode.COPY, item)"
+                            @click="editConnection(EditMode.COPY, item)"
                             color="success"
                             small
                             fab
@@ -384,7 +384,7 @@
                           <v-btn
                             v-bind="attrs"
                             v-on="on"
-                            @click="editConnection(editMode.DELETE, item)"
+                            @click="editConnection(EditMode.DELETE, item)"
                             color="error"
                             small
                             fab
@@ -406,7 +406,7 @@
             <v-btn
               v-bind="attrs"
               v-on="on"
-              @click="editConnection(editMode.CREATE)"
+              @click="editConnection(EditMode.CREATE)"
               class="mb-14"
               color="success"
               dark
@@ -435,6 +435,7 @@
 <script>
 import EditConnectionVue from "../components/EditConnection.vue";
 import "vuetify/lib/components/VBtnToggle";
+import { EditMode, ViewMode, DbDef } from "@/utils/enum"
 export default {
   name: "connections",
   components: { EditConnectionVue },
@@ -458,7 +459,7 @@ export default {
     editConnection(mode, item) {
       this.mode = mode;
       this.item = Object.assign({}, item);
-      if (this.mode == this.editMode.COPY) {
+      if (this.mode == EditMode.COPY) {
         this.item.Id = null;
         this.item.Name = this.item.Name + " " + this.$t("label.aCopy");
         this.item.Current = false;
@@ -472,8 +473,8 @@ export default {
       });
     },
     getAvatar(type) {
-      const dbType = this.dbTypes.filter((v) => v.value == type);
-      return dbType.length > 0 ? dbType[0].icon : null;
+      const dbDef = this.DbDef.filter((def) => def.value == type);
+      return dbDef.length > 0 ? dbDef[0].iconSvg : null;
     },
     getOperationLabel(operation) {
       return this.$t("label.editMode." + operation).replace(
@@ -481,11 +482,11 @@ export default {
         this.$t("label.connection")
       );
     },
-    switch2Current(id) {
+    switch2Current(item) {
       window.chrome.webview.postMessage({
         api: "switch2Current",
         callback: "switch2CurrentCallback",
-        args: id,
+        args: JSON.stringify(item),
       });
     },
     switch2CurrentCallback(content) {
@@ -505,7 +506,7 @@ export default {
       }
     },
     getImageTransition(current, hover) {
-      if (this.toggleViewMode == 0) {
+      if (this.toggleViewMode == ViewMode.LIST) {
         return current || hover ? "slideIn" : "slideOut";
       } else {
         return current || hover ? "blurIn" : "blurOut";
@@ -519,7 +520,7 @@ export default {
     },
     toggleSelectAllDbTypes() {
       if (this.isDbTypeFiltered) {
-        this.filterDbTypes = this.dbTypes.map((type) => type.value).slice();
+        this.filterDbTypes = this.DbDef.map((def) => def.value).slice();
       } else {
         this.filterDbTypes = [];
       }
@@ -644,7 +645,7 @@ export default {
       }
     },
     isDbTypeFiltered() {
-      return this.filterDbTypes.length < this.dbTypes.length;
+      return this.filterDbTypes.length < this.DbDef.length;
     },
     getSortFields() {
       const sortFields = {
@@ -664,41 +665,18 @@ export default {
   },
   data() {
     return {
+      EditMode,
+      DbDef,
+      ViewMode,
       showEdit: false,
-      mode: "detail",
-      toggleViewMode: 0, // 0: list 1: module
+      mode: EditMode.DETAIL,
+      toggleViewMode: ViewMode.MODULE, // 0: list 1: module
       showPassword: false,
       item: null,
       search: "",
-      filterDbTypes: [1, 2, 3, 4, 5],
+      // filterDbTypes: [1, 2, 3, 4, 5],
+      filterDbTypes: DbDef.map(def => def.value),
       sorts: [], // direction 0: n/a 1: ascending 2: descending; field
-      dbTypes: [
-        {
-          label: "Oracle",
-          value: 1,
-          icon: require("@/assets/icons/database/oracle.svg"),
-        },
-        {
-          label: "MySQL",
-          value: 2,
-          icon: require("@/assets/icons/database/mysql.svg"),
-        },
-        {
-          label: "SQL Server",
-          value: 3,
-          icon: require("@/assets/icons/database/sqlserver.svg"),
-        },
-        {
-          label: "PostgreSQL",
-          value: 4,
-          icon: require("@/assets/icons/database/postgresql.svg"),
-        },
-        {
-          label: "SQLite",
-          value: 5,
-          icon: require("@/assets/icons/database/sqlite.svg"),
-        },
-      ],
       records: [],
     };
   },

@@ -25,8 +25,8 @@
                 >
                   <v-select
                     v-model="formData.databaseType"
-                    :disabled="mode != editMode.CREATE && mode != editMode.COPY || shouldDisable"
-                    :items="dbTypes"
+                    :disabled="mode != EditMode.CREATE && mode != EditMode.COPY || shouldDisable"
+                    :items="DbDef"
                     :menu-props="{ bottom: true, offsetY: true }"
                     :label="$t('label.databaseType')"
                     :error-messages="errors[0]"
@@ -38,12 +38,12 @@
                       <v-img
                         class="ml-2"
                         max-width="32"
-                        :src="item.icon"
+                        :src="item.icon32"
                       ></v-img
                       ><span class="ml-2">{{ item.label }}</span>
                     </template>
                     <template v-slot:item="{ item }">
-                      <v-img max-width="32" :src="item.icon"></v-img
+                      <v-img max-width="32" :src="item.icon32"></v-img
                       ><span class="ml-2">{{ item.label }}</span>
                     </template>
                   </v-select>
@@ -59,7 +59,7 @@
                 >
                   <v-text-field
                     v-model="formData.connectionName"
-                    :disabled="mode == editMode.DELETE || mode == editMode.DETAIL || shouldDisable"
+                    :disabled="mode == EditMode.DELETE || mode == EditMode.DETAIL || shouldDisable"
                     :label="$t('label.connectionName')"
                     :error-messages="errors[0]"
                     :placeholder="$t('message.ph.connectionName')"
@@ -78,7 +78,7 @@
                 >
                   <v-text-field
                     v-model="formData.host"
-                    :disabled="mode == editMode.DELETE || mode == editMode.DETAIL || shouldDisable"
+                    :disabled="mode == EditMode.DELETE || mode == EditMode.DETAIL || shouldDisable"
                     :label="$t('label.host')"
                     :error-messages="errors[0]"
                     :placeholder="$t('message.ph.host')"
@@ -97,7 +97,7 @@
                 >
                   <v-text-field
                     v-model="formData.port"
-                    :disabled="mode == editMode.DELETE || mode == editMode.DETAIL || shouldDisable"
+                    :disabled="mode == EditMode.DELETE || mode == EditMode.DETAIL || shouldDisable"
                     :label="$t('label.port')"
                     :error-messages="errors[0]"
                     :placeholder="$t('message.ph.port')"
@@ -116,7 +116,7 @@
                 >
                   <v-text-field
                     v-model="formData.databaseName"
-                    :disabled="mode == editMode.DELETE || mode == editMode.DETAIL || shouldDisable"
+                    :disabled="mode == EditMode.DELETE || mode == EditMode.DETAIL || shouldDisable"
                     :label="$t('label.databaseName')"
                     :error-messages="errors[0]"
                     :placeholder="$t('message.ph.databaseName')"
@@ -135,7 +135,7 @@
                 >
                   <v-text-field
                     v-model="formData.username"
-                    :disabled="mode == editMode.DELETE || mode == editMode.DETAIL || shouldDisable"
+                    :disabled="mode == EditMode.DELETE || mode == EditMode.DETAIL || shouldDisable"
                     :label="$t('label.username')"
                     :error-messages="errors[0]"
                     :placeholder="$t('message.ph.username')"
@@ -154,7 +154,7 @@
                 >
                   <v-text-field
                     v-model="formData.password"
-                    :disabled="mode == editMode.DELETE || mode == editMode.DETAIL || shouldDisable"
+                    :disabled="mode == EditMode.DELETE || mode == EditMode.DETAIL || shouldDisable"
                     :label="$t('label.password')"
                     :error-messages="errors[0]"
                     :placeholder="$t('message.ph.password')"
@@ -163,7 +163,7 @@
                     dense
                   >
                     <template v-slot:append>
-                      <v-icon :color="showPassword ? 'primary' : 'grey darken-2'" :disabled="mode == editMode.DELETE || mode == editMode.DETAIL || shouldDisable" @click="updateShowPassword =! showPassword">
+                      <v-icon :color="showPassword ? 'primary' : 'grey darken-2'" :disabled="mode == EditMode.DELETE || mode == EditMode.DETAIL || shouldDisable" @click="updateShowPassword =! showPassword">
                         {{ showPassword ? 'mdi-eye' : 'mdi-eye-off' }}
                       </v-icon>
                     </template>
@@ -175,12 +175,12 @@
               <v-col class="py-0">
                 <v-switch
                   v-model="formData.protected"
-                  :disabled="mode == editMode.DELETE || mode == editMode.DETAIL || shouldDisable"
+                  :disabled="mode == EditMode.DELETE || mode == EditMode.DETAIL || shouldDisable"
                   class="mx-3"
                   inset
-                  :false-value="protectedMode.NORMAL"
-                  :true-value="protectedMode.PROTECTED"
-                  :label="$t(`label.${formData.protected == protectedMode.PROTECTED ? 'protected' : 'normal'}Mode`)"
+                  :false-value="ProtectedMode.NORMAL"
+                  :true-value="ProtectedMode.PROTECTED"
+                  :label="$t(`label.${formData.protected == ProtectedMode.PROTECTED ? 'protected' : 'normal'}Mode`)"
                 ></v-switch>
               </v-col>
               <v-spacer></v-spacer>
@@ -191,7 +191,7 @@
             <v-btn @click="onTestConnection" :loading="processing.testConnection" :disabled="shouldDisable" color="secondary">{{ $t('label.testConnection') }}<v-icon right>mdi-connection</v-icon></v-btn>
             <v-spacer></v-spacer>
             <v-btn @click="onClose" :disabled="shouldDisable" text>{{ $t('label.cancel') }}</v-btn>
-            <v-btn v-if="mode && mode != editMode.DETAIL" type="submit" :loading="processing.submit" :disabled="invalid || shouldDisable" color="primary">{{ $t('label.ok') }}</v-btn>
+            <v-btn v-if="mode && mode != EditMode.DETAIL" type="submit" :loading="processing.submit" :disabled="invalid || shouldDisable" color="primary">{{ $t('label.ok') }}</v-btn>
           </v-card-actions>
         </v-card>
       </v-form>
@@ -200,6 +200,7 @@
 </template>
 
 <script>
+import { EditMode, ProtectedMode, DbDef } from "@/utils/enum"
 export default {
   name: "edit-connection",
   props: {
@@ -279,18 +280,18 @@ export default {
       // detail
       let icon = "mdi-file-document-box";
       switch (this.mode) {
-        case this.editMode.DELETE:
+        case EditMode.DELETE:
           // delete
           icon = "mdi-delete";
           break;
-        case this.editMode.EDIT:
+        case EditMode.EDIT:
           // edit
           icon = "mdi-pencil";
           break;
-        case this.editMode.COPY:
+        case EditMode.COPY:
           icon = "mdi-content-copy";
           break;
-        case this.editMode.CREATE:
+        case EditMode.CREATE:
           // add
           icon = "mdi-plus";
           break;
@@ -305,7 +306,7 @@ export default {
       );
     },
     getAlternativeMode() {
-      return this.mode == this.editMode.COPY ? this.editMode.CREATE : this.mode;
+      return this.mode == EditMode.COPY ? EditMode.CREATE : this.mode;
     },
     getHint() {
       return this.$t(`message.hint.connection.${this.getAlternativeMode}`);
@@ -327,7 +328,7 @@ export default {
     },
     getBackgroundImage() {
       if (this.formData && this.formData.databaseType > 0) {
-        return this.dbTypeBackgrounds[this.formData.databaseType - 1]
+        return DbDef[this.formData.databaseType - 1].iconSvg
       }
       return ''
     },
@@ -361,8 +362,8 @@ export default {
     onSubmit() {
       this.processing.submit = true
       switch (this.mode) {
-        case this.editMode.CREATE:
-        case this.editMode.COPY:
+        case EditMode.CREATE:
+        case EditMode.COPY:
           this.$refs.observer.validate().then(isValid => {
             if (isValid) {
               window.chrome.webview.postMessage({
@@ -375,7 +376,7 @@ export default {
             }
           })
           break;
-        case this.editMode.EDIT:
+        case EditMode.EDIT:
           this.$refs.observer.validate().then(isValid => {
             if (isValid) {
               window.chrome.webview.postMessage({
@@ -388,7 +389,7 @@ export default {
             }
           })
           break;
-        case this.editMode.DELETE:
+        case EditMode.DELETE:
           window.chrome.webview.postMessage({
             api: 'deleteConnection',
             callback: 'editConnectionCallback',
@@ -426,40 +427,9 @@ export default {
   },
   data() {
     return {
-      dbTypes: [
-        {
-          label: "Oracle",
-          value: 1,
-          icon: require("@/assets/icons/database/oracle_mini_32.png"),
-        },
-        {
-          label: "MySQL",
-          value: 2,
-          icon: require("@/assets/icons/database/mysql_mini_32.png"),
-        },
-        {
-          label: "SQL Server",
-          value: 3,
-          icon: require("@/assets/icons/database/sqlserver_mini_32.png"),
-        },
-        {
-          label: "PostgreSQL",
-          value: 4,
-          icon: require("@/assets/icons/database/postgresql_mini_32.png"),
-        },
-        {
-          label: "SQLite",
-          value: 5,
-          icon: require("@/assets/icons/database/sqlite_mini_32.png"),
-        },
-      ],
-      dbTypeBackgrounds: [
-        require("@/assets/icons/database/oracle.svg"),
-        require("@/assets/icons/database/mysql.svg"),
-        require("@/assets/icons/database/sqlserver.svg"),
-        require("@/assets/icons/database/postgresql.svg"),
-        require("@/assets/icons/database/sqlite.svg"),
-      ],
+      EditMode,
+      ProtectedMode,
+      DbDef,
       rules: 
         [{
           databaseType: { required: true },
@@ -516,7 +486,7 @@ export default {
         databaseName: null,
         username: null,
         password: null,
-        protected: 0,
+        protected: ProtectedMode.NORMAL,
         current: false,
         lastChange: null,
       },
