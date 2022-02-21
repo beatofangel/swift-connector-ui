@@ -467,11 +467,22 @@ export default {
       }
       this.showEdit = true;
     },
-    refreshConnections() {
-      window.chrome.webview.postMessage({
-        api: "loadConnections",
-        callback: "loadConnectionsCallback",
-      });
+    refreshConnections(content) {
+      let shouldRefresh = false;
+      if (content) {
+        const curDbId = JSON.parse(content);
+        if (this.records.filter((item) => item.Id == curDbId && !item.Current) > 0) {
+          shouldRefresh = true
+        }
+      } else {
+        shouldRefresh = true
+      }
+      if (shouldRefresh) {
+        window.chrome.webview.postMessage({
+          api: "loadConnections",
+          callback: "loadConnectionsCallback",
+        });
+      }
     },
     getAvatar(type) {
       const dbDef = this.DbDef.filter((def) => def.value == type);
