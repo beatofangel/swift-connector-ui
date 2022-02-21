@@ -470,8 +470,8 @@ export default {
     refreshConnections(content) {
       let shouldRefresh = false;
       if (content) {
-        const curDbId = JSON.parse(content);
-        if (this.records.filter((item) => item.Id == curDbId && !item.Current) > 0) {
+        const result = JSON.parse(content);
+        if (this.records.filter((item) => item.Id == result.Data && !item.Current) > 0) {
           shouldRefresh = true
         }
       } else {
