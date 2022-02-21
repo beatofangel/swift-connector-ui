@@ -471,7 +471,7 @@ export default {
       let shouldRefresh = false;
       if (content) {
         const result = JSON.parse(content);
-        if (this.records.filter((item) => item.Id == result.Data && !item.Current) > 0) {
+        if (this.records.filter((item) => item.Id == result.Data && !item.Current).length > 0) {
           shouldRefresh = true
         }
       } else {
