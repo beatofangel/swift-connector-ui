@@ -59,7 +59,8 @@
     "loadingFailed": "Loading @:failed",
     "currentConnection": "Current connection",
     "switch2Current": "Switch to this {0}",
-    "switch": "switch {0}",
+    "switchSuccess": "switch @:success",
+    "switchFailed": "switch @:failed",
     "ph": {
       "databaseType": "Please select @:label.databaseType",
       "connectionName": "Please input @:label.connectionName",

@@ -59,7 +59,8 @@
     "loadingFailed": "载入@:failed",
     "currentConnection": "当前连接",
     "switch2Current": "切换到此{0}",
-    "switch": "切换{0}",
+    "switchSuccess": "切换@:success",
+    "switchFailed": "切换@:failed",
     "ph": {
       "databaseType": "请选择@:label.databaseType",
       "connectionName": "请输入@:label.connectionName",

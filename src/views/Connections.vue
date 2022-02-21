@@ -493,13 +493,13 @@ export default {
       const result = JSON.parse(content);
       if (result.Success) {
         this.$toast.success(
-          this.$t("message.switch").replace("{0}", this.$t("message.success")),
+          this.$t("message.switchSuccess"),
           { icon: "mdi-check-circle-outline" }
         );
         this.refreshConnections();
       } else {
         this.$toast.error(
-          this.$t("message.switch").replace("{0}", this.$t("message.failed")),
+          this.$t("message.switchFailed"),
           { icon: "mdi-close-circle-outline" }
         );
         console.error(result.Message);
