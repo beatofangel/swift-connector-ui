@@ -442,6 +442,7 @@ export default {
   mounted() {
     window.loadConnectionsCallback = this.loadConnectionsCallback;
     window.switch2CurrentCallback = this.switch2CurrentCallback;
+    window.refreshConnections = this.refreshConnections;
     this.refreshConnections();
   },
   methods: {
