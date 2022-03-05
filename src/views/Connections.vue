@@ -244,7 +244,7 @@
                         </v-row>
                         <v-row :class="toggleViewMode == ViewMode.MODULE ? 'mt-n6' : null">
                           <v-col
-                            :cols="toggleViewMode == ViewMode.LIST ? 4 : 12"
+                            :cols="avatarCols"
                             :class="toggleViewMode == ViewMode.LIST ? 'pr-0' : null"
                           >
                             <v-tooltip :disabled="item.Current" top>
@@ -263,13 +263,14 @@
                                     v-bind="attrs"
                                     v-on="on"
                                   >
-                                    <v-card-text class="justify-center">
+                                    <v-card-text class="text-center">
+                                      <v-spacer/>
                                       <v-img
                                         :class="
                                           getImageTransition(
                                             item.Current,
                                             hover
-                                          )
+                                          ) + ' mx-auto'
                                         "
                                         width="168"
                                         height="168"
@@ -290,7 +291,7 @@
                           </v-col>
                           <v-col
                             v-if="toggleViewMode == ViewMode.LIST"
-                            cols="8"
+                            :cols="12 - avatarCols"
                             class="pl-0"
                           >
                             <v-card height="200" elevation="0">
@@ -436,6 +437,7 @@
 import EditConnectionVue from "../components/EditConnection.vue";
 import "vuetify/lib/components/VBtnToggle";
 import { EditMode, ViewMode, DbDef } from "@/utils/enum"
+import { mapActions } from "vuex";
 export default {
   name: "connections",
   components: { EditConnectionVue },
@@ -443,9 +445,15 @@ export default {
     window.loadConnectionsCallback = this.loadConnectionsCallback;
     window.switch2CurrentCallback = this.switch2CurrentCallback;
     window.refreshConnections = this.refreshConnections;
+    window.initPage = this.initPage;
     this.refreshConnections();
   },
   methods: {
+    ...mapActions(["restore"]),
+    initPage(content) {
+      this.restore();
+      this.refreshConnections(content);
+    },
     loadConnectionsCallback(content) {
       const result = JSON.parse(content);
       if (result.Success) {
@@ -674,6 +682,22 @@ export default {
       };
       return sortFields;
     },
+    avatarCols() {
+      let cols = 4
+      if (this.toggleViewMode == ViewMode.LIST) {
+        const {lg, xl} = this.$vuetify.breakpoint
+        if (xl) {
+          cols = 2
+        } else if (lg) {
+          cols = 3
+        } else {
+          // default
+        }
+      } else {
+        cols = 12
+      }
+      return cols
+    }
   },
   data() {
     return {
