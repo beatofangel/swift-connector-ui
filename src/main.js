@@ -14,10 +14,14 @@ Vue.component('validation-provider', ValidationProvider)
 Vue.component('validation-observer', ValidationObserver)
 
 router.beforeEach((to, from, next) => {
-  const regex = /\/[a-z]{2}(_[A-Z]{2})?\/connections/
-  const rst = regex.test(to.path)
-  store.state.showNavi = !rst
-  store.state.showCtrlBox = rst
+  const regexArr = [
+    /\/[a-z]{2}(_[A-Z]{2})?\/connections/,
+    /\/[a-z]{2}(_[A-Z]{2})?\/query-editor/
+  ]
+  if (regexArr.findIndex(r => r.test(to.path)) != -1) {
+    store.state.showNavi = false
+    store.state.showCtrlBox = true
+  }
   next()
 })
 router.afterEach(localeChanged)

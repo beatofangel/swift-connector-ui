@@ -24,6 +24,13 @@ const routes = [
     component: () => import('../views/Connections.vue')
   },
   {
+    path: '/query-editor',
+    name: 'QueryEditor',
+    icon: 'mdi-pencil',
+    solo: true,
+    component: () => import('../views/QueryEditor.vue')
+  },
+  {
     path: '/change-log',
     name: 'ChangeLog',
     icon: 'mdi-playlist-edit',

@@ -16,11 +16,14 @@ const ViewMode = Object.freeze({
   MODULE: 1
 });
 
+import { PLSQL, MySQL, SQLite, PostgreSQL, MSSQL } from "@codemirror/lang-sql";
 const DbDef = Object.freeze(
   [
     {
       label: "Oracle",
       value: 1,
+      dialect: PLSQL,
+      lang: "plsql",
       icon32: "images/database/oracle_mini_32.png",
       icon64: "images/database/oracle_large_64.png",
       iconSvg: "images/database/oracle.svg",
@@ -28,6 +31,8 @@ const DbDef = Object.freeze(
     {
       label: "MySQL",
       value: 2,
+      dialect: MySQL,
+      lang: "mysql",
       icon32: "images/database/mysql_mini_32.png",
       icon64: "images/database/mysql_large_64.png",
       iconSvg: "images/database/mysql.svg",
@@ -35,6 +40,8 @@ const DbDef = Object.freeze(
     {
       label: "SQL Server",
       value: 3,
+      dialect: MSSQL,
+      lang: "tsql",
       icon32: "images/database/sqlserver_mini_32.png",
       icon64: "images/database/sqlserver_large_64.png",
       iconSvg: "images/database/sqlserver.svg",
@@ -42,6 +49,8 @@ const DbDef = Object.freeze(
     {
       label: "PostgreSQL",
       value: 4,
+      dialect: PostgreSQL,
+      lang: "postgresql",
       icon32: "images/database/postgresql_mini_32.png",
       icon64: "images/database/postgresql_large_64.png",
       iconSvg: "images/database/postgresql.svg",
@@ -49,6 +58,8 @@ const DbDef = Object.freeze(
     {
       label: "SQLite",
       value: 5,
+      dialect: SQLite,
+      lang: "sql",
       icon32: "images/database/sqlite_mini_32.png",
       icon64: "images/database/sqlite_large_64.png",
       iconSvg: "images/database/sqlite.svg",

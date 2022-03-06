@@ -445,7 +445,7 @@ export default {
     window.loadConnectionsCallback = this.loadConnectionsCallback;
     window.switch2CurrentCallback = this.switch2CurrentCallback;
     window.refreshConnections = this.refreshConnections;
-    window.initPage = this.initPage;
+    window.initConnections = this.initPage;
     this.refreshConnections();
   },
   methods: {

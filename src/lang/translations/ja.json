@@ -61,6 +61,8 @@
     "switch2Current": "この{0}に切り替えます",
     "switchSuccess": "切り替えに@:message.successしました",
     "switchFailed": "切り替えに@:message.failedしました",
+    "copySuccess": "コピーに@:message.successしました",
+    "copyFailed": "コピーに@:message.failedしました",
     "ph": {
       "databaseType": "@:label.databaseTypeを選択してください",
       "connectionName": "@:label.connectionNameを入力してください",

@@ -61,6 +61,8 @@
     "switch2Current": "Switch to this {0}",
     "switchSuccess": "switch @:message.success",
     "switchFailed": "switch @:message.failed",
+    "copySuccess": "copy @:message.success",
+    "copyFailed": "copy @:message.failed",
     "ph": {
       "databaseType": "Please select @:label.databaseType",
       "connectionName": "Please input @:label.connectionName",

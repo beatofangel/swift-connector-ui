@@ -61,6 +61,8 @@
     "switch2Current": "切换到此{0}",
     "switchSuccess": "切换@:message.success",
     "switchFailed": "切换@:message.failed",
+    "copySuccess": "复制@:message.success",
+    "copyFailed": "复制@:message.failed",
     "ph": {
       "databaseType": "请选择@:label.databaseType",
       "connectionName": "请输入@:label.connectionName",

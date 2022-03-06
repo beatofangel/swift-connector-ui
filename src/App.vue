@@ -118,7 +118,7 @@ export default {
     window.platformVerifyCallback = this.platformVerifyCallback;
     window.navigateTo = this.navigateTo;
     this.taskPaneMode = window.taskPaneMode;
-    window.chrome.webview.postMessage({
+    window.chrome.webview && window.chrome.webview.postMessage({
       api: "platformVerify",
       callback: "platformVerifyCallback"
     });
