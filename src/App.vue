@@ -104,7 +104,12 @@
 import { mapGetters, mapActions } from "vuex";
 export default {
   created() {
-    console.log("created")
+    document.querySelector('.website-loading').addEventListener("animationend", function() {
+      setTimeout(() => {
+        document.querySelector('.website-loading').remove();
+      }, 1000);
+    }, { once: true });
+
     this.$router.options.routes.forEach((route) => {
       this.items.push({
         name: route.name,
@@ -114,10 +119,7 @@ export default {
       });
     });
     
-    document.querySelector('.website-loading').addEventListener("animationend", function() {
-      document.querySelector('.website-loading').remove();
-    }, false);
-    document.querySelector('.website-loading').classList.add("website-loaded")
+    document.querySelector('.website-loading').classList.add("website-loading-fadeout")
   },
   mounted() {
     window.platformVerifyCallback = this.platformVerifyCallback;
