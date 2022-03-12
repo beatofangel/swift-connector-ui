@@ -107,6 +107,7 @@ export default {
     document.querySelector('.website-loading').addEventListener("animationend", function() {
       setTimeout(() => {
         document.querySelector('.website-loading').remove();
+        document.querySelector('#app').classList.add("website-loading-fadein");
       }, 1000);
     }, { once: true });
 

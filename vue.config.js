@@ -3,6 +3,10 @@ module.exports = {
     'vuetify'
   ],
 
+  devServer: {
+    host: 'localhost'
+  },
+
   pluginOptions: {
     i18n: {
       locale: 'zh',
