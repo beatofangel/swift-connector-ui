@@ -104,6 +104,7 @@
 import { mapGetters, mapActions } from "vuex";
 export default {
   created() {
+    console.log("created")
     document.querySelector('.website-loading').remove();
     this.$router.options.routes.forEach((route) => {
       this.items.push({
